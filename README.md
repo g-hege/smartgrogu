@@ -1,1 +1,1 @@
-# 🚀 Rails + Ralix + Tailwind + shelly + opendtu
+# 🚀 Rails + Ralix + Tailwind + Avo+ GoodJob + shelly + opendtu
