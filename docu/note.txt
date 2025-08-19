@@ -1,0 +1,34 @@
+
+rails generate model MyModel --no-migration
+
+class UserOld < ApplicationRecord
+  # Den Tabellennamen auf "users_old" setzen
+  self.table_name = "users_old"
+
+  # Den Primärschlüssel auf "user_id" setzen
+  self.primary_key = "user_id"
+
+  # Da die Tabelle keine "created_at" und "updated_at" Spalten hat,
+  # müssen wir die Zeitstempel-Funktionalität deaktivieren.
+  self.timestamps = false
+
+  # Optional: Spaltennamen an die Rails-Konvention anpassen (aliase)
+  alias_attribute :name, :user_name
+  alias_attribute :email, :user_email
+  alias_attribute :joined_at, :join_date
+end
+
+rails generate model Epex --no-migration
+rails generate model Consumption --no-migration
+rails generate model Recordings --no-migration
+rails generate model SolarForecast --no-migration
+rails generate model Crypto --no-migration
+rails generate model Weather --no-migration
+rails generate model WeatherForecast --no-migration
+
+
+
+------------------------------------------
+good_job
+
+bundle exec good_job start
