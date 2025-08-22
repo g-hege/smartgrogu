@@ -7,6 +7,7 @@ module API
       end
 
       mount API::V1::DailyRuntime
+      mount API::V1::DailyEnergy
 
     end
   end

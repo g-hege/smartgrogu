@@ -44,6 +44,11 @@ Rails.application.configure do
 	      cron: '1 0 * * *', # one minute after midnight
 	      class: 'TwilightImportJob',
 	      description: 'import twilight data for today'
+	    },
+	    crypto_import: {
+	      cron: '10 0 * * *', # 
+	      class: 'CryptoImportJob',
+	      description: 'import actual crypto data'
 	    }
 	  }
 	end

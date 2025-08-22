@@ -1,0 +1,28 @@
+meta {
+  name: daily_energy
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://172.22.254.92:3000//api/v1/daily_energy?day=2025-08-22&grid_consumed=11&solar_self_consumed=22&solar_to_grid=33&autarky_rate=44&self_consumed_rate=55
+  body: none
+  auth: inherit
+}
+
+params:query {
+  day: 2025-08-22
+  grid_consumed: 11
+  solar_self_consumed: 22
+  solar_to_grid: 33
+  autarky_rate: 44
+  self_consumed_rate: 55
+}
+
+headers {
+  X_Api_Key: 12345
+}
+
+settings {
+  encodeUrl: true
+}

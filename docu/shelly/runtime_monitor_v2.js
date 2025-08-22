@@ -1,15 +1,25 @@
-// Dieser Skript misst die kumulierte Einschaltzeit eines Shelly-Plugs pro Tag
-// und sendet die Daten eine Ruby-on-Rails-App
+// Dieser Skript misst die täglich, kumulierte Einschaltzeit eines Shelly-Plugs pro Tag
+// und sendet die Daten an eine Ruby-on-Rails-App
 
 let RAILS_API_URL = "https://ihre-rails-app.com/api/shelly_data"; 
 
-let INTERVAL_SECONDS = 10; // check every 10 seconds
-let MIN_RUNNING_WATT = 350; // minimal  Watt 
+let min_running_watt = 50; 
 
+let INTERVAL_SECONDS = 10; // check every 10 seconds
 let MQTTpublish = true;
 let SHELLY_ID = undefined;
-
 let log = 1;
+
+let device_info = Shelly.getDeviceInfo();
+let parts = device_info.id.split('-');
+let DEVICE_ID = parts[parts.length - 1];
+console.log('Die Geräte-ID lautet: ' + DEVICE_ID);
+
+Shelly.call("KVS.Get", { key: "MinRunningWatt" }, function(res) {
+  if (res && res.value) {
+    min_running_watt = parseInt(res.value, 10);
+  }
+});
 
 Shelly.call("Mqtt.GetConfig", "", function (res, err_code, err_msg, ud) {
   if (res && res.topic_prefix) {
@@ -50,9 +60,9 @@ function continueAfterRuntimeUpdate(currentDate) {
         }
 
         // Schritt 2: Prüfe die Leistung und inkrementiere, falls der Verbraucher eingeschalten ist
-        if (Shelly.getComponentStatus('switch:0').apower > MIN_RUNNING_WATT) {
+        if (Shelly.getComponentStatus('switch:0').apower > min_running_watt) {
             currentRunTime += INTERVAL_SECONDS;
-            print(currentDate, ': ', currentRunTime);
+            print(currentDate, ': ', currentRunTime, ' (min ', min_running_watt,'W)');
 
             // Speichere den neuen Wert sofort zurück ins KVS
             Shelly.call("KVS.Set", { key: "DailyRunTime", value: currentRunTime.toString() }, function() {

@@ -1,4 +1,4 @@
-web: bin/rails server -p 3000
+web: bin/rails server -b 0.0.0.0 -p 3000
 worker: GOOD_JOB_WORKER=true exec bundle exec good_job start
 js: yarn build --watch
 css: yarn build:css --watch

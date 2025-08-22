@@ -37,6 +37,7 @@ function setShellyRelay(state) {
 }
 
 function updateDailyRunTimeAndCheck() {
+  // 1. Zuerst die tägliche Laufzeit aktualisieren
   let d = new Date();
   let day = d.getDate().toString();
 
@@ -54,6 +55,7 @@ function updateDailyRunTimeAndCheck() {
 }
 
 function continueAfterRuntimeUpdate() {
+  // 2. Dann den Status des externen Shelly-Geräts abfragen
   Shelly.call("HTTP.GET", { url: "http://" + TARGET_SHELLY_IP + "/rpc/Shelly.GetStatus" }, function(result, error_code, error_message) {
     if (error_code === 0 && result && result.body) {
       let status = JSON.parse(result.body);
@@ -67,14 +69,16 @@ function continueAfterRuntimeUpdate() {
           }
           currentRunTime += INTERVAL_SECONDS;
           Shelly.call("KVS.Set", { key: "DailyPumpRunTime", value: currentRunTime.toString() }, function() {
+            // Erst wenn die Laufzeit aktualisiert wurde, fahre mit der Hauptlogik fort
             checkAndSwitch();
           });
         });
       } else {
-        checkAndSwitch(); 
+        checkAndSwitch(); // Auch wenn die Pumpe aus ist, die Logik ausführen
       }
     } else {
       print("Error get Shelly status: " + error_message);
+      // Im Fehlerfall trotzdem versuchen, die Hauptlogik auszuführen
       checkAndSwitch();
     }
   });
@@ -129,8 +133,11 @@ function checkAndSwitch() {
             let currentRunTimeHours = currentRunTime / 3600;
             let switchCondition = -1;
 
+//            print("info(",currentSolarPowerWatts , "W > ", minSolarPowerPumpRun, "W) | Runtime: ",currentRunTimeHours.toFixed(2), ' hours');
+//           print(BoilerOn);
+
             // condition 1: currentSolarPowerWatts > minSolarPowerPumpRun UND BoilerOn = false
-            if ((currentSolarPowerWatts > minSolarPowerPumpRun) && !BoilerOn) {
+            if ((parseInt(currentSolarPowerWatts) > parseInt(minSolarPowerPumpRun)) && !BoilerOn) {
               switchCondition = 'solar';
               shouldPumpRun = true;
               print("condition 1 fulfilled: enough solar power and the boiler is off. (",currentSolarPowerWatts , "W > ", minSolarPowerPumpRun, "W) | Runtime: ",currentRunTimeHours.toFixed(2), ' hours');
@@ -151,7 +158,7 @@ function checkAndSwitch() {
             }
             
             if (shouldPumpRun === false) {
-              print("pump is off");
+              print("pump is off (Solar: ",currentSolarPowerWatts,"W)");
               switchCondition = 'off';
             }
 
@@ -182,10 +189,10 @@ function checkAndSwitch() {
   );
 }
 
-
+// Starte den Prozess im Timer
 Timer.set(INTERVAL_SECONDS * 1000, true, function() {
   updateDailyRunTimeAndCheck();
 });
 
-
+// Initialer Start des Skripts
 updateDailyRunTimeAndCheck();
