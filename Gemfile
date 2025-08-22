@@ -44,7 +44,7 @@ group :development do
   gem "dotenv-rails"
   gem 'capistrano', '~> 3.18'
   gem 'capistrano-rails'
-  gem 'capistrano-rbenv' # Nutze capistrano-rbenv, wenn du rbenv verwendest. Ansonsten capistrano-rvm.
+  gem 'capistrano-rvm' # Nutze capistrano-rbenv, wenn du rbenv verwendest. Ansonsten capistrano-rvm.
   gem 'capistrano-puma' # Für den Puma-Webserver
 end  
 

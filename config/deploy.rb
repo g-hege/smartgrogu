@@ -42,3 +42,5 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+set :rvm_ruby_version, '3.3.5@smartgrogu' # Passe dies an deine Ruby-Version und Gemset an
