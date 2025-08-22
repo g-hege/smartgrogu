@@ -49,6 +49,7 @@ let currentGridPower_W = 0;
 let log = 1; // 0=kein Log, 1=Basis-Log, 2=Detail-Log (Empfehlung: 1 für normalen Betrieb)
 let MQTTpublish = true;
 let updateName = true; // Für Gerätenamen-Update
+let writeToApi = true;
 
 let SHELLY_ID = undefined;
 Shelly.call("Mqtt.GetConfig", "", function (res, err_code, err_msg, ud) {
@@ -99,20 +100,20 @@ function formatPower(power) {
 }
 
 function SaveAllCountersToKVS() {
-  SetKVS("RunTimeDate", currentDate);
+  SetKVS("CurrentDate", currentDate);
   SetKVS("EnergyConsumedKWh", energyConsumedKWh.toFixed(5));
   SetKVS("EnergyReturnedKWh", energyReturnedKWh.toFixed(5));
   SetKVS("DailyGridConsumedKWh", dailyGridConsumedKWh.toFixed(5));
   SetKVS("DailySolarSelfConsumptionKWh", dailySolarSelfConsumptionKWh.toFixed(5));
   SetKVS("DailySolarWastedKWh", dailySolarWastedKWh.toFixed(5));
-  if (log > 0) print("Alle Zählerstände in KVS-Queue eingereiht.");
+  if (log > 1) print("Alle Zählerstände in KVS-Queue eingereiht.");
 }
 
 // ### Laden der KVS-Werte beim Start ###
 let kvsValuesToLoad = [
     { key: "RailsApiUrl", class: "string", callback: function(value) { RAILS_API_URL = value; } },  
     { key: "X-Api-Key", class: "string", callback: function(value) { X_Api_Key = value; } },  
-    { key: "RunTimeDate", class: "string", callback: function(value) { currentDate = value; } },
+    { key: "CurrentDate", class: "string", callback: function(value) { currentDate = value; } },
     { key: "EnergyReturnedKWh", class: "val", callback: function(value) { energyReturnedKWh = value; } },
     { key: "EnergyConsumedKWh", class: "val", callback: function(value) { energyConsumedKWh = value; } },
     { key: "DailyGridConsumedKWh", class: "val", callback: function(value) { dailyGridConsumedKWh = value; } },
@@ -221,40 +222,42 @@ function timerHandler(user_data) {
   let self_consumption_rate = (total_generation_kwh > 0) ? (dailySolarSelfConsumptionKWh / total_generation_kwh * 100) : 0;
   let valSelfConsumption = self_consumption_rate.toFixed(1);
 
-
   counterPublishToDb++;
   if (counterPublishToDb >= PUBLISH_TO_DB) {
     counterPublishToDb = 0;
 
-    let apiuri = RAILS_API_URL + '/api/v1/daily_energy';
-    let headers = {
-        'Content-Type': 'application/json',
-        'X-Api-Key': X_Api_Key
-    };
-    let body = JSON.stringify({
-      "day": currentDate,
-      "grid_consumed": valDailyGrid,
-      "solar_self_consumed": valSolarSelf,
-      "solar_to_grid": valSolarWasted,
-      "autarky_rate": valAutarky,
-      "self_consumed_rate": valSelfConsumption
-    });
-    Shelly.call("HTTP.POST", {
-        url: apiuri,
-        headers: headers,
-        body: body,
-        timeout: 2
-    }, function(result, error_code, error_message) {
-        if (error_code != 0) {
-            print("Fehler beim Senden des Requests: " + error_message);
-        }
-    });
+    if(writeToApi) {
+      let apiuri = RAILS_API_URL + '/api/v1/daily_energy';
+      let headers = {
+          'Content-Type': 'application/json',
+          'X-Api-Key': X_Api_Key
+      };
+      let body = JSON.stringify({
+        "day": currentDate,
+        "grid_consumed": valDailyGrid,
+        "solar_self_consumed": valSolarSelf,
+        "solar_to_grid": valSolarWasted,
+        "autarky_rate": valAutarky,
+        "self_consumed_rate": valSelfConsumption
+      });
+      Shelly.call("HTTP.POST", {
+          url: apiuri,
+          headers: headers,
+          body: body,
+          timeout: 2
+      }, function(result, error_code, error_message) {
+          if (error_code != 0) {
+              print("Fehler beim Senden des Requests: " + error_message);
+          }
+      });
+    }
 
     let now = new Date();
+    let newdate = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()
 // new day? - reset daily counters    
-    if (currentDate != now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()){
-      print(">>>>>>>>>>>>>>>>>>>>>>>>> new date");  
-        currentDate = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+    if (currentDate != newdate){
+      print(">>>>>> new date");  
+        currentDate = newdate;
         dailyGridConsumedKWh = 0.0; dailyGridConsumedWs = 0.0;
         dailySolarSelfConsumptionKWh = 0.0; dailySolarWastedKWh = 0.0;
         dailySolarSelfConsumptionWs = 0.0; dailySolarWastedWs = 0.0;
@@ -299,8 +302,6 @@ function timerHandler(user_data) {
   }
 }
 
-
-
 Timer.set(TIMER_INTERVAL_SECONDS * 1000, true, timerHandler, null);
 
-if (log > 0) print("Energiecounter started");// Shelly Energiezähler Skript
+if (log > 0) print("EnergieCounter started");// Shelly Energiezähler Skript

@@ -42,6 +42,11 @@ group :development do
   gem "web-console"
   gem "debug"
   gem "dotenv-rails"
-end
+  gem 'capistrano', '~> 3.18'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv' # Nutze capistrano-rbenv, wenn du rbenv verwendest. Ansonsten capistrano-rvm.
+  gem 'capistrano-puma' # Für den Puma-Webserver
+end  
+
 
 
