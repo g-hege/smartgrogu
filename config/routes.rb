@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
 
   mount API::Base, at: "/"
-  mount_avo
-  mount GoodJob::Engine => 'good_job'
+
+  authenticate :user do
+    mount_avo
+    mount GoodJob::Engine => 'good_job'
+  end
+  
 
   devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks'
+    omniauth_callbacks: 'users/omniauth_callbacks', skip: [:registrations]
   }
 
   root "home#index"

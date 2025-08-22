@@ -8,8 +8,10 @@
         <div class="hidden sm:block">
           <div class="ml-8 flex items-baseline space-x-4">
             <a href="<%= root_path %>" class="<%= nav_link_class("home") %>">Home</a>
-            <a href="<%= Avo.configuration.root_path %>" class="<%= nav_link_class("avo") %>">Avo</a>
-            <a href="good_job" class="<%= nav_link_class("good_job") %>">GoodJob</a>            
+            <% if user_signed_in? %>
+              <a href="<%= Avo.configuration.root_path %>" class="<%= nav_link_class("avo") %>">Avo</a>
+              <a href="good_job" class="<%= nav_link_class("good_job") %>">GoodJob</a>            
+            <% end %>
             <a href="<%= articles_path %>" class="<%= nav_link_class("articles") %>">Articles</a>
             <a href="<%= users_path %>" class="<%= nav_link_class("users") %>">Users</a>
           </div>
