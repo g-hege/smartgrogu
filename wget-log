@@ -1,6 +1,0 @@
---2025-08-21 14:48:30--  http://localhost:3000/api/v1/daily_runtime?device_id=08f9e0ea820c
-Resolving localhost (localhost)... 127.0.0.1
-Connecting to localhost (localhost)|127.0.0.1|:3000... connected.
-HTTP request sent, awaiting response... 401 Unauthorized
-
-Username/Password Authentication Failed.
