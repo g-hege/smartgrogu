@@ -20,9 +20,9 @@ set :deploy_to, "/var/www/smartgrogu"
 # Default value for :pty is false
 # set :pty, true
 
-set :linked_files, %w{config/database.yml config/secrets.yml config/master.key config/puma.rb}
+set :linked_files, %w{config/database.yml config/secrets.yml config/master.key }
 
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets tmp/state vendor/bundle public/system public/uploads}
 
 
 # Default value for :linked_files is []
@@ -38,7 +38,7 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 # set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 5
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
