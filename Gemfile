@@ -31,6 +31,13 @@ gem 'roo' # excel read
 gem 'grape'
 gem 'grape-jbuilder'
 
+gem 'capistrano', '~> 3.18'
+gem 'capistrano-rails'
+gem 'capistrano-rvm' # Nutze capistrano-rbenv, wenn du rbenv verwendest. Ansonsten capistrano-rvm.
+gem 'capistrano-puma', require: false
+gem 'capistrano-good-job', require: false
+
+
 # Front-end
 gem "propshaft", "~> 1.1"
 gem "jsbundling-rails", "~> 1.0"
@@ -42,10 +49,6 @@ group :development do
   gem "web-console"
   gem "debug"
   gem "dotenv-rails"
-  gem 'capistrano', '~> 3.18'
-  gem 'capistrano-rails'
-  gem 'capistrano-rvm' # Nutze capistrano-rbenv, wenn du rbenv verwendest. Ansonsten capistrano-rvm.
-  gem 'capistrano-puma' # Für den Puma-Webserver
 end  
 
 

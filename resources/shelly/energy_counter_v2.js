@@ -240,8 +240,9 @@ function timerHandler(user_data) {
         "autarky_rate": valAutarky,
         "self_consumed_rate": valSelfConsumption
       });
-      Shelly.call("HTTP.POST", {
+      Shelly.call("HTTP.Request", {
           url: apiuri,
+          method: "POST", 
           headers: headers,
           body: body,
           timeout: 2

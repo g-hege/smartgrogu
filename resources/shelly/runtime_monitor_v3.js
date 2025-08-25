@@ -141,8 +141,9 @@ function send2db(currentDate, currentRunTime){
     "day": currentDate,
     "runtime": currentRunTime
   });
-  Shelly.call("HTTP.POST", {
+  Shelly.call("HTTP.Request", {
       url: apiuri,
+      method: "POST", 
       headers: headers,
       body: body,
       timeout: 2

@@ -118,6 +118,8 @@ GEM
       sshkit (>= 1.9.0)
     capistrano-bundler (2.1.1)
       capistrano (~> 3.1)
+    capistrano-good-job (0.1.1)
+      capistrano (>= 3.0)
     capistrano-puma (0.2.3)
       capistrano (>= 3.0)
     capistrano-rails (1.7.0)
@@ -451,6 +453,7 @@ DEPENDENCIES
   bootsnap (~> 1.18)
   cancancan (~> 3.4)
   capistrano (~> 3.18)
+  capistrano-good-job
   capistrano-puma
   capistrano-rails
   capistrano-rvm
