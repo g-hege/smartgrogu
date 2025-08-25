@@ -9,8 +9,11 @@ class MqttPublisherJob < ApplicationJob
   def perform
 
     Rails.logger.info "Publishing MQTT messages at #{Time.current}"
-
-    mqtt_prefix = 'test_'
+    if Rails.env.development?
+      mqtt_prefix = 'test_'
+    else
+      mqtt_prefix = ''
+    end
 
     poolcontrol_ip = Shelly.get_ip('poolcontrol')
     max_market_price = ConfigDb.get('max_market_price',0).to_i
@@ -29,7 +32,6 @@ class MqttPublisherJob < ApplicationJob
                         .limit(1)
                         .pluck(:marketprice)
                         .first.to_f / 10.0 #   cent/kWh
-
 
     # `Date.today.all_day` ist die idiomatische Rails-Methode für Datumsgleichheit
     price_running_hours = Epex.where(timestamp: Date.today.all_day)
