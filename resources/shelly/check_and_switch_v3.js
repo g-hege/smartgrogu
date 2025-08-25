@@ -144,7 +144,7 @@ function checkAndSwitch() {
             }
 
             // condition 2: price ok
-            if (currentMarketPrice <= maxMarketPrice && currentRunTimeHours <= limitPumpRuntime){
+            if (parseInt(currentMarketPrice) <= parseInt(maxMarketPrice) && parseInt(currentRunTimeHours) <= parseInt(limitPumpRuntime)){
               switchCondition = 'price';
               shouldPumpRun = true;
               print("condition 2 fulfilled: currentMarketPrice: ",currentMarketPrice, ' cent <= MaxMarketPrice: ', maxMarketPrice, ' cent | runtime: ',currentRunTimeHours.toFixed(2), ' < ', limitPumpRuntime, ' Stunden' );

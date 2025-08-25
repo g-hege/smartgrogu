@@ -1,4 +1,4 @@
-# app/services/shelly_api.rb
+# app/services/shelly.rb
 
 class Shelly
 
