@@ -49,7 +49,17 @@ Rails.application.configure do
 	      cron: '10 0 * * *', # 
 	      class: 'CryptoImportJob',
 	      description: 'import actual crypto data'
-	    }
+	    },
+	    shelly_import: {
+	      cron: '*/10 * * * *', # 
+	      class: 'ShellyImportJob',
+	      description: 'import shelly data'
+	    },
+	    homematic_import: {
+	      cron: '*/30 * * * *', # 
+	      class: 'HomematicImportJob',
+	      description: 'import homematic data'
+	    }	    
 	  }
 	end
 

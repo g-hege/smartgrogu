@@ -93,6 +93,14 @@ class MqttPublisherJob < ApplicationJob
       hm_data[hm] = (value || 0).to_f
     end
 
+    # Bitcoin-Preis abrufen
+    bitcoin = Crypto.where(slug: 'bitcoin').order(last_updated: :desc).first&.price || 0
+    bitcoin = bitcoin.to_f.round(2)
+
+    # Ethereum-Preis abrufen
+    ethereum = Crypto.where(slug: 'ethereum').order(last_updated: :desc).first&.price || 0
+    ethereum = ethereum.to_f.round(2)
+
     grogu = { uptime: distance_of_time_in_words(Rails.application.config.boot_time, Time.now) }
 
     begin
@@ -137,6 +145,8 @@ class MqttPublisherJob < ApplicationJob
           forecast_arr.reverse.each do |f|
             client.publish("#{mqtt_prefix}forcast", {log: f}.to_json)
           end
+
+          client.publish('crypto/status',  { ethereum: ethereum, bitcoin: bitcoin }.to_json )
           
           client.publish("#{mqtt_prefix}homematic/status", hm_data.to_json )
 
