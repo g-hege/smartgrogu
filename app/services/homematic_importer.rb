@@ -19,11 +19,11 @@ class HomematicImporter
     hm_json = get_homematic_data
     device_recordings.each do |dev|
       value = eval("hm_json['devices']['#{dev[:id]}']#{dev[:value]}")
-      puts "#{dev[:device]}: #{value}"
+      puts "Device: #{dev[:device]}: #{value}"
       rec = {device: dev[:device], value: value}
       Recording.create(rec)
-    end
-
+    end;
+    'done'
   end
 
   def self.show_labels
