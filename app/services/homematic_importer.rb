@@ -16,7 +16,7 @@ class HomematicImporter
 
   def self.import_actual_data
     puts DateTime.now.strftime('%Y-%m-%d %H:%M')
-    hm_json = HomematicImporter.get_HomematicImporter_data()
+    hm_json = get_homematic_data
     device_recordings.each do |dev|
       value = eval("hm_json['devices']['#{dev[:id]}']#{dev[:value]}")
       puts "#{dev[:device]}: #{value}"
@@ -27,7 +27,7 @@ class HomematicImporter
   end
 
   def self.show_labels
-    hm_json = HomematicImporter.get_homematic_data()
+    hm_json = get_homematic_data
     hm_json['devices'].each do |dev|
       puts "#{dev[0]}: #{hm_json['devices'][dev[0]]['label']}"
     end;
