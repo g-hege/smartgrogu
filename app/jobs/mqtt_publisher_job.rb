@@ -19,9 +19,10 @@ class MqttPublisherJob < ApplicationJob
     pump_mode = ConfigDb.get('pump_mode',3)
 
     usage_pump_this_day = (Consumption.where(device: 'pool', timestamp: Date.current.all_day).sum(:value) || 0).to_f
-    solar_power_this_day = (Consumption.where(device: 'solar', timestamp: Date.current.all_day).sum(:value) || 0).to_f
-    energy_this_day = (Consumption.where(device: 'energy', timestamp: Date.current.all_day).sum(:value) || 0).to_f
-    send_2_grid_this_day = (Consumption.where(device: 'energy', timestamp: Date.current.all_day).sum(:reversed) || 0).to_f
+    solar_power_this_day = (Energy.where(day: Date.current).sum("solar_self_consumed + solar_to_grid") || 0).to_f
+    energy_this_day = (Energy.where(day: Date.current).sum("grid_consumed") || 0).to_f
+    send_2_grid_this_day = (Energy.where(day: Date.current).sum("solar_to_grid") || 0).to_f
+
 
     current_price = Epex.where('timestamp < ?', Time.now)
                         .order(timestamp: :desc)
@@ -77,6 +78,18 @@ class MqttPublisherJob < ApplicationJob
       end
     end
 
+    solar_forecast_today = (SolarForecastDay.where(day: Date.today).pluck(:pv_estimate10).first || 0).to_f
+    solar_forecast_tomorrow = (SolarForecastDay.where(day: (Date.today + 1)).pluck(:pv_estimate10).first || 0).to_f
+
+    poolcontrol_addon = Shelly.get_value(Shelly.get_ip('poolcontrol'),'Temperature.GetStatus?id=100')
+    pool_temp = poolcontrol_addon['tC']
+
+    hm_data = {}
+    homematic_recording.each do |hm|
+      value = Recording.where(device: hm).order(timestamp: :desc).pluck(:value).first
+      hm_data[hm] = (value || 0).to_f
+    end
+
     grogu = { uptime: distance_of_time_in_words(Rails.application.config.boot_time, Time.now) }
 
     begin
@@ -101,6 +114,17 @@ class MqttPublisherJob < ApplicationJob
                                     }.to_json  )
           client.publish("#{mqtt_prefix}c4/solarweek", solar_week_data.to_json )
 
+
+          client.publish("#{mqtt_prefix}c4/currentpower",{ energy_this_day: energy_this_day.round(1),
+                                       solar_power_this_day: solar_power_this_day.round(1),
+                                       send_2_grid_this_day: send_2_grid_this_day.round(1),
+                                       usage_pump_this_day: (usage_pump_this_day.to_f / 1000).round(1)
+                                    }.to_json )          
+
+          client.publish("#{mqtt_prefix}c4/solarforecast", {today: solar_forecast_today.round(2), tomorrow: solar_forecast_tomorrow.round(2) }.to_json )
+
+          client.publish("#{mqtt_prefix}c4/addon", {pool_temp: pool_temp}.to_json  )
+
           client.publish("#{mqtt_prefix}grogu/status", grogu.to_json)
 
           client.publish("#{mqtt_prefix}weather", weather.to_json)
@@ -111,6 +135,8 @@ class MqttPublisherJob < ApplicationJob
             client.publish("#{mqtt_prefix}forcast", {log: f}.to_json)
           end
           
+          client.publish("#{mqtt_prefix}homematic/status", hm_data.to_json )
+
       end
     rescue MQTT::Exception => e
       # Behandelt Fehler wie Verbindungsabbrüche und versucht die Verbindung neu herzustellen
@@ -134,6 +160,11 @@ class MqttPublisherJob < ApplicationJob
     end
 
   end
+
+  def homematic_recording
+    %w{temp-garden humidity-garden temp-loggia humidity-loggia temp-wz humidity-wz}
+  end
+
 
   private
 

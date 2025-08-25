@@ -20,6 +20,18 @@ class Shelly
     'done'
   end
 
+# key = 'Temperature.GetStatus?id=100'
+  def self.get_value(shellyurl,key)
+    uri = URI("http://#{shellyurl}/rpc/#{key}")
+    begin
+      response = HTTParty.get(uri)
+    rescue
+      return nil
+    end
+    JSON.load(response.body)
+  end
+
+
   def set_kvs(shellyurl, key, value)
     uri = URI("http://#{shellyurl}/rpc")
 
