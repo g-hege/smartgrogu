@@ -44,3 +44,16 @@ set :keep_releases, 5
 # set :ssh_options, verify_host_key: :secure
 
 set :rvm_ruby_version, '3.3.5@smartgrogu' # Passe dies an deine Ruby-Version und Gemset an
+
+namespace :deploy do
+
+  task :restart do
+    on roles(:app), in: :sequence, wait: 2 do
+      sudo '/bin/systemctl restart puma.service'
+      sudo '/bin/systemctl restart goodjob.service'
+    end
+  end
+
+end
+after 'deploy:publishing', 'deploy:restart'
+
