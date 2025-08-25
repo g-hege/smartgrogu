@@ -4,6 +4,8 @@ lock "~> 3.19.2"
 set :application, "smartgrogu"
 set :repo_url, 'git@github.com:g-hege/smartgrogu.git'
 
+set :pty, true
+
 # Default branch is :master
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
