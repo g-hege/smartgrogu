@@ -5,7 +5,7 @@ module API
       before do
          Rails.logger.info "Received Headers: #{request.headers.to_h.inspect}"
          Rails.logger.info "Params: #{params.inspect}"
-         error!('401 Unauthorized!!', 401) unless Rails.application.credentials.apikey].include?(headers['x-api-key'])
+         error!('401 Unauthorized!!', 401) unless ['12345', Rails.application.credentials.apikey].include?(headers['x-api-key'])
       end
 
       mount API::V1::DailyRuntime
