@@ -15,8 +15,6 @@ class MqttPublisherJob < ApplicationJob
       mqtt_prefix = ''
     end
 
-    mqtt_prefix = ''
-
     poolcontrol_ip = Shelly.get_ip('poolcontrol')
     max_market_price = ConfigDb.get('max_market_price',0).to_i
     min_solar_power = ConfigDb.get('min_solar_power',600).to_i
