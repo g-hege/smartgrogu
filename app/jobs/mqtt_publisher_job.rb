@@ -133,7 +133,7 @@ class MqttPublisherJob < ApplicationJob
                                        solar_power_this_day: solar_power_this_day.round(1),
                                        send_2_grid_this_day: send_2_grid_this_day.round(1),
                                        usage_pump_this_day: (usage_pump_this_day.to_f / 1000).round(1),
-                                       current_power_grid: current_power_grid.round(1)
+                                       current_grid_power: current_power_grid.round(1)
                                     }.to_json )          
 
           client.publish("#{mqtt_prefix}c4/solarforecast", {today: solar_forecast_today.round(2), tomorrow: solar_forecast_tomorrow.round(2) }.to_json )
