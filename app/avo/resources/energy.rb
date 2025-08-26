@@ -2,7 +2,9 @@ class Avo::Resources::Energy < Avo::BaseResource
 
   self.model_class = ::Energy
   self.title = 'Energy'
-#  self.plural_name = 'Energy' # Oder ein anderer passender Name
+  self.resource_name = "Energy"          # Singular
+  self.resource_name_plural = "Energy"   # Oder "Energien", was du willst
+#  self.name = 'Energy'
 
   # self.includes = []
   # self.attachments = []
