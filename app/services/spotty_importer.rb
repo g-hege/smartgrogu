@@ -129,6 +129,7 @@ class SpottyImporter
 				  end
 				  puts "File saved successfully."
 				  import_excel()
+				  update_energy()
 				else
 				  puts "Request failed with status: #{response.code}"
 				end
@@ -170,6 +171,18 @@ class SpottyImporter
 
 
 puts "🏁 Import abgeschlossen! #{import_count} neue Datensätze importiert, #{update_count} Datensätze aktualisiert."
+
+  end
+
+  def update_energy
+
+			Energy.where(real_wiener_netze: nil).each do |energyday|
+				 	day_consumption = (Spotty.where( timestamp: energyday.day.all_day).sum(:consumption) || 0).to_f
+					puts "#{energyday.day} ->  #{day_consumption}"
+				 	if day_consumption > 0
+				 		energyday.update(real_wiener_netze: day_consumption)
+				 	end
+			end
 
   end
 

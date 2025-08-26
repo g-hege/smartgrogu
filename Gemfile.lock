@@ -120,14 +120,15 @@ GEM
       capistrano (~> 3.1)
     capistrano-good-job (0.1.1)
       capistrano (>= 3.0)
-    capistrano-puma (0.2.3)
-      capistrano (>= 3.0)
     capistrano-rails (1.7.0)
       capistrano (~> 3.1)
       capistrano-bundler (>= 1.1, < 3)
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano3-puma (1.2.1)
+      capistrano (~> 3.0)
+      puma (>= 2.6)
     chartkick (5.2.0)
     colorize (1.1.0)
     concurrent-ruby (1.3.5)
@@ -454,9 +455,9 @@ DEPENDENCIES
   cancancan (~> 3.4)
   capistrano (~> 3.18)
   capistrano-good-job
-  capistrano-puma
   capistrano-rails
   capistrano-rvm
+  capistrano3-puma
   chartkick
   colorize
   cssbundling-rails (~> 1.1)

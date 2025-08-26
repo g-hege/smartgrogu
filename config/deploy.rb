@@ -51,8 +51,8 @@ namespace :deploy do
 
   task :restart do
     on roles(:app), in: :sequence, wait: 2 do
-#      sudo '/bin/systemctl restart puma.service'
-#      sudo '/bin/systemctl restart goodjob.service'
+      sudo '/bin/systemctl restart puma.service'
+      sudo '/bin/systemctl restart goodjob.service'
     end
   end
 

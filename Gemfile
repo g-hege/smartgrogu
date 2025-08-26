@@ -34,8 +34,8 @@ gem 'grape-jbuilder'
 gem 'capistrano', '~> 3.18'
 gem 'capistrano-rails'
 gem 'capistrano-rvm' # Nutze capistrano-rbenv, wenn du rbenv verwendest. Ansonsten capistrano-rvm.
-gem 'capistrano-puma', require: false
-gem 'capistrano-good-job', require: false
+gem "capistrano3-puma"
+gem 'capistrano-good-job'
 
 
 # Front-end
