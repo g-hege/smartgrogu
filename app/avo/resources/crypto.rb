@@ -13,7 +13,7 @@ class Avo::Resources::Crypto < Avo::BaseResource
     field :name, as: :text
     field :symbol, as: :text    
     field :slug, as: :text
-    field :last_updated, as: :date
+    field :last_updated, as: :date_time, sortable: true
     field :price, as: :number 
   end
 end
