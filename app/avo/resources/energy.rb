@@ -2,8 +2,14 @@ class Avo::Resources::Energy < Avo::BaseResource
 
   self.model_class = ::Energy
   self.title = 'Energy'
-  self.resource_name = "Energy"          # Singular
-  self.resource_name_plural = "Energy"   # Oder "Energien", was du willst
+
+  def self.label
+    "Energy"
+  end
+
+  def self.plural_label
+    "Energy"
+  end
 #  self.name = 'Energy'
 
   # self.includes = []
