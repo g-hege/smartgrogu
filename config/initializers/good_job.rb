@@ -46,7 +46,7 @@ Rails.application.configure do
 	      description: 'import twilight data for today'
 	    },
 	    crypto_import: {
-	      cron: '10 * * * *', # 
+	      cron: '*/10 * * * *', # 
 	      class: 'CryptoImportJob',
 	      description: 'import actual crypto data'
 	    },
