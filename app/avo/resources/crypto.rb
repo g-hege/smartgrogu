@@ -10,7 +10,7 @@ class Avo::Resources::Crypto < Avo::BaseResource
   
   def fields
     field :id, as: :id, except_on: [:forms, :index]
-    field :names, as: :text
+    field :name, as: :text
     field :symbol, as: :text    
     field :slug, as: :text
     field :last_updated, as: :date
