@@ -1,6 +1,6 @@
 class Avo::Resources::DailyRuntime < Avo::BaseResource
 
-  self.translation_key = "avo.resource_daily_runtime.config"
+    self.translation_key = "avo.resource_translations.daily_ruintime"
   # self.includes = []
   # self.attachments = []
   # self.search = {

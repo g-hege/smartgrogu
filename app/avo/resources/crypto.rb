@@ -1,6 +1,6 @@
 class Avo::Resources::Crypto < Avo::BaseResource
 
-  self.translation_key = "avo.resource_crypto.config"
+    self.translation_key = "avo.resource_translations.crypto"
 
   # self.includes = []
   # self.attachments = []
