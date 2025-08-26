@@ -20,6 +20,13 @@ class Shelly
     'done'
   end
 
+
+  def self.get_device_value(device, key)
+      ip = get_ip(device)
+      return nil if ip.nil?
+      get_value(ip,key)
+  end
+
 # key = 'Temperature.GetStatus?id=100'
   def self.get_value(shellyurl,key)
     uri = URI("http://#{shellyurl}/rpc/#{key}")
