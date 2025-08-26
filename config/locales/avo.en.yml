@@ -10,3 +10,18 @@ en:
       weather_forecast:
         one: "Weather forecast"
         other: "Weather forecast"
+      spotty:
+        one: "Spotty consumption"
+        other: "Spotty consumption"
+      config:
+        one: "Config"
+        other: "Config"
+      crypto:
+        one: "Crypto rate"
+        other: "Crypto rate"
+      daily_runtime:
+        one: "Daily runtime"
+        other: "Daily runtime"        
+      daily_forecast:
+        one: "Daily forecast"
+        other: "Daily forecast"

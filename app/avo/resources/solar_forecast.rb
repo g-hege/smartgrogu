@@ -1,4 +1,6 @@
 class Avo::Resources::SolarForecast < Avo::BaseResource
+
+  self.translation_key = "avo.resource_daily_forecast.config"
   # self.includes = []
   # self.attachments = []
   # self.search = {

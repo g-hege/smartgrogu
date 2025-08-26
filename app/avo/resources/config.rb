@@ -1,5 +1,8 @@
 class Avo::Resources::Config < Avo::BaseResource
   self.model_class = ConfigData
+
+  self.translation_key = "avo.resource_translations.config"
+
   # self.includes = []
   # self.attachments = []
   # self.search = {

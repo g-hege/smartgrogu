@@ -1,4 +1,6 @@
 class Avo::Resources::Spotty < Avo::BaseResource
+
+  self.translation_key = "avo.resource_translations.spotty"
   # self.includes = []
   # self.attachments = []
   # self.search = {
