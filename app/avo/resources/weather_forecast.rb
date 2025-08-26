@@ -1,4 +1,6 @@
 class Avo::Resources::WeatherForecast < Avo::BaseResource
+
+  self.translation_key = "avo.resource_translations.weather_forecast"
   # self.includes = []
   # self.attachments = []
   # self.search = {

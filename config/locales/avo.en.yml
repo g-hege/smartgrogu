@@ -4,4 +4,9 @@ en:
       energy:
         one: "Energy"
         other: "Energy"
-
+      weather:
+        one: "Weather"
+        other: "Weather"
+      weather_forecast:
+        one: "Weather forecast"
+        other: "Weather forecast"
