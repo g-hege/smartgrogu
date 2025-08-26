@@ -8,6 +8,7 @@ class Avo::Resources::Epex < Avo::BaseResource
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
+
   self.ordering = { timestamp: :desc }
 
   def fields

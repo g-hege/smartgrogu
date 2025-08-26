@@ -6,6 +6,7 @@ class Avo::Resources::Energy < Avo::BaseResource
   self.translation_key = "avo.resource_translations.energy"
 
   self.ordering = { day: :asc }
+
 #  self.name = 'Energy'
 
   # self.includes = []

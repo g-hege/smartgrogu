@@ -1,6 +1,6 @@
 class Avo::Resources::Weather < Avo::BaseResource
 
-    self.translation_key = "avo.resource_translations.weather"
+   self.translation_key = "avo.resource_translations.weather"
 
   # self.includes = []
   # self.attachments = []
@@ -8,7 +8,7 @@ class Avo::Resources::Weather < Avo::BaseResource
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
   self.ordering = { timestamp: :desc }
-  
+
   def fields
     field :id, as: :id, except_on: [:forms, :index]
     field :timestamp, as: :date_time, sortable: true
