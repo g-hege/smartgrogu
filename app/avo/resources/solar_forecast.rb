@@ -7,7 +7,8 @@ class Avo::Resources::SolarForecast < Avo::BaseResource
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
 
-  self.ordering = { period_end: :desc }
+  self.default_sort_column = :period_end
+  self.default_sort_direction = :desc  
   
   def fields
     field :id, as: :id, except_on: [:forms, :index, :show]

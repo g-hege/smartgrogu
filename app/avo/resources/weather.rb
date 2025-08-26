@@ -7,7 +7,8 @@ class Avo::Resources::Weather < Avo::BaseResource
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
-  self.ordering = { timestamp: :desc }
+  self.default_sort_column = :timestamp
+  self.default_sort_direction = :desc   
 
   def fields
     field :id, as: :id, except_on: [:forms, :index]
