@@ -6,6 +6,9 @@ class Avo::Resources::DailyRuntime < Avo::BaseResource
   # }
   
   def fields
-    field :id, as: :id
+    field :id, as: :id, except_on: [:forms, :index]
+    field :day, as: :date, sortable: true
+    field :device, as: :text
+    field :runtime, as: :number
   end
 end

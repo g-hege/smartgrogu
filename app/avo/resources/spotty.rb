@@ -6,6 +6,9 @@ class Avo::Resources::Spotty < Avo::BaseResource
   # }
   
   def fields
-    field :id, as: :id
+    field :id, as: :id, except_on: [:forms, :index]
+    field :timestamp, as: :date_time, sortable: true
+    field :consumption, as: :number
+    field :price, as: :number    
   end
 end
