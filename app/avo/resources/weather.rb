@@ -15,8 +15,8 @@ class Avo::Resources::Weather < Avo::BaseResource
     field :temp_min, as: :number    
     field :temp_max, as: :number    
     field :humidity, as: :number          
-    field :wind_speed as: :number   
-    field :wind_deg as: :number   
-    field :clouds  as: :number  
+    field :wind_speed, as: :number 
+    field :wind_deg, as: :number   
+    field :clouds,  as: :number  
   end
 end
