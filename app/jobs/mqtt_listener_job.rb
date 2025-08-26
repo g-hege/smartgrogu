@@ -33,19 +33,19 @@ class MqttListenerJob < ApplicationJob
           when 'pump-mode'
             pump_mode = m[actual_dev[:param]]
             ConfigDb.set('pump_mode', pump_mode.to_s)
-            ShellyApi.set_kvs(ShellyApi.get_ip('poolcontrol'), "PumpMode", pump_mode)
+            Shelly.set_kvs(Shelly.get_ip('poolcontrol'), "PumpMode", pump_mode)
           when 'min-solar-power'
             min_solar_power = m[actual_dev[:param]]
             ConfigDb.set('min_solar_power', min_solar_power.to_s)
-            ShellyApi.set_kvs(ShellyApi.get_ip('poolcontrol'), "MinSolarPowerPumpRun", min_solar_power)
+            Shelly.set_kvs(Shelly.get_ip('poolcontrol'), "MinSolarPowerPumpRun", min_solar_power)
           when 'max-market-price'
             max_market_price = m[actual_dev[:param]]
             ConfigDb.set('max_market_price', max_market_price.to_s)
-            ShellyApi.set_kvs(ShellyApi.get_ip('poolcontrol'), "MaxMarketPrice", max_market_price)
+            Shelly.set_kvs(Shelly.get_ip('poolcontrol'), "MaxMarketPrice", max_market_price)
           when 'limit_pump_runtime'
             limit_pump_runtime = m[actual_dev[:param]]
             ConfigDb.set('limit_pump_runtime', limit_pump_runtime.to_s)
-            ShellyApi.set_kvs(ShellyApi.get_ip('poolcontrol'), "LimitPumpRuntime", limit_pump_runtime)
+            Shelly.set_kvs(Shelly.get_ip('poolcontrol'), "LimitPumpRuntime", limit_pump_runtime)
           when 'solarlimit'
             solarlimit = m[actual_dev[:param]]
             Opendtu.setlimit(solarlimit)

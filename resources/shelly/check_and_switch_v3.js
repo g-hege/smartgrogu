@@ -88,7 +88,7 @@ function checkAndSwitch() {
 
   let kvsValuesToLoad = [
     { key: 'CurrentSolarPowerWatts', callback: function(value) {currentSolarPowerWatts = value}, default: 1},
-    { key: 'MinSolarPowerPumpRun', callback: function(value) {minSolarPowerPumpRun = value}, default: 451},
+    { key: 'MinSolarPowerPumpRun', callback: function(value) {minSolarPowerPumpRun = value}, default: 450},
     { key: 'BoilerOn', callback: function(value) {BoilerOn = value}, default: 'false'},
     { key: 'PumpMode', callback: function(value) {PumpMode = value}, default: 'auto'},
     { key: 'DailyPumpRunTime', callback: function(value) {currentRunTime = value}, default: 0},  

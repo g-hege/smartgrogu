@@ -140,7 +140,13 @@ class MqttPublisherJob < ApplicationJob
 
           client.publish("#{mqtt_prefix}c4/solarforecast", {today: solar_forecast_today.round(2), tomorrow: solar_forecast_tomorrow.round(2) }.to_json )
 
-          client.publish("#{mqtt_prefix}c4/addon", {pool_temp: pool_temp}.to_json  )
+          client.publish("#{mqtt_prefix}c4/addon", {pool_temp: pool_temp}.to_json)
+          client.publish("#{mqtt_prefix}c4/usage", {  
+                                        day1: usage_last_days[0].round(2), 
+                                        day2: usage_last_days[1].round(2),
+                                        day3: usage_last_days[2].round(2)
+                                       }.to_json ) 
+
 
           client.publish("#{mqtt_prefix}grogu/status", grogu.to_json)
 
@@ -155,10 +161,7 @@ class MqttPublisherJob < ApplicationJob
           client.publish('crypto/status',  { ethereum: ethereum, bitcoin: bitcoin }.to_json )
           
           client.publish("#{mqtt_prefix}homematic/status", hm_data.to_json )
-          client.publish('c4/usage', {  day1: usage_last_days[0].round(2), 
-                                        day2: usage_last_days[1].round(2),
-                                        day3: usage_last_days[2].round(2)
-                                }.to_json ) 
+
 
       end
     rescue MQTT::Exception => e
