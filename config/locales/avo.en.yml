@@ -8,20 +8,23 @@ en:
         one: "Weather"
         other: "Weather"
       weather_forecast:
-        one: "Weather forecast"
-        other: "Weather forecast"
+        one: "Weather Forecast"
+        other: "Weather Forecast"
       spotty:
-        one: "Spotty consumption"
-        other: "Spotty consumption"
+        one: "Spotty Consumption"
+        other: "Spotty Consumption"
       config:
         one: "Config"
         other: "Config"
       crypto:
-        one: "Crypto rate"
-        other: "Crypto rate"
+        one: "Crypto Rate"
+        other: "Crypto Rate"
       daily_runtime:
-        one: "Daily runtime"
-        other: "Daily runtime"        
-      daily_forecast:
-        one: "Daily forecast"
-        other: "Daily forecast"
+        one: "Daily Runtime"
+        other: "Daily Runtime"        
+      solar_forecast:
+        one: "Solar Forecast"
+        other: "Solar Forecast"
+      epex:
+        one: "Epex Rate"
+        other: "Epex Rate"        

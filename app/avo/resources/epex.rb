@@ -1,5 +1,7 @@
 class Avo::Resources::Epex < Avo::BaseResource
-  self.title = 'test'
+
+
+  self.translation_key = "avo.resource_translations.epex"
 #  self.resource_name = "EPEX Spot Preise"
   # self.includes = []
   # self.attachments = []
