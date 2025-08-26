@@ -106,6 +106,8 @@ class MqttPublisherJob < ApplicationJob
     emdata = Shelly.get_device_value('energy','Shelly.GetStatus')
     current_power_grid = emdata["em:0"]['total_act_power'].to_f
 
+    usage_last_days = Energy.where.not(real_wiener_netze: nil).order(day: :desc).limit(3).pluck(:real_wiener_netze) 
+
     begin
 
       MQTT::Client.connect(Rails.application.credentials.mqtts) do |client|
@@ -153,6 +155,10 @@ class MqttPublisherJob < ApplicationJob
           client.publish('crypto/status',  { ethereum: ethereum, bitcoin: bitcoin }.to_json )
           
           client.publish("#{mqtt_prefix}homematic/status", hm_data.to_json )
+          client.publish('c4/usage', {  day1: usage_last_days[0].round(2), 
+                                        day2: usage_last_days[1].round(2),
+                                        day3: usage_last_days[2].round(2)
+                                }.to_json ) 
 
       end
     rescue MQTT::Exception => e
