@@ -8,9 +8,8 @@ class Avo::Resources::Crypto < Avo::BaseResource
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
 
-  self.default_sorting = {
-    last_updated: :desc
-  }
+  self.ordering = { last_updated: :desc }
+
   
   def fields
     field :id, as: :id, except_on: [:forms, :index]
