@@ -1,0 +1,7 @@
+en:
+  avo:
+    resource_translations:
+      energy:
+        one: "Energy"
+        other: "Energy"
+

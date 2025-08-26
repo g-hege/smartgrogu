@@ -3,13 +3,7 @@ class Avo::Resources::Energy < Avo::BaseResource
   self.model_class = ::Energy
   self.title = 'Energy'
 
-  def self.label
-    "Energy"
-  end
-
-  def self.plural_label
-    "Energy"
-  end
+  self.translation_key = "avo.resource_translations.energy"
 #  self.name = 'Energy'
 
   # self.includes = []
