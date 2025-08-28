@@ -29,6 +29,10 @@ class Shelly
 
 # key = 'Temperature.GetStatus?id=100'
   def self.get_value(shellyurl,key)
+    if !shellyurl.match?(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/)
+      shellyurl = get_ip(shellyurl)
+      return nil if shellyurl.nil?
+    end
     uri = URI("http://#{shellyurl}/rpc/#{key}")
     begin
       response = HTTParty.get(uri)
@@ -40,6 +44,12 @@ class Shelly
 
 
   def set_kvs(shellyurl, key, value)
+
+    if !shellyurl.match?(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/)
+      shellyurl = Shelly.get_ip(shellyurl)
+      return nil if shellyurl.nil?
+    end
+
     uri = URI("http://#{shellyurl}/rpc")
 
     http = Net::HTTP.new(uri.host, uri.port)

@@ -24,7 +24,25 @@ class EpexImporter
       insertrecs = data['data'].map { |h| { timestamp: Time.at(h['start_timestamp'].to_s[0..-4].to_i).to_datetime.utc, marketprice:  h['marketprice']}}
       Epex.insert_all(insertrecs)
     end
+    
+    send_current_epex
 
   end
+
+  def send_current_epex
+
+        ShellyCloud.update_market_price
+
+        current_price = Epex.where('timestamp < ?', Time.now)
+                        .order(timestamp: :desc)
+                        .limit(1)
+                        .pluck(:marketprice)
+                        .first.to_f / 10.0 #   cent/kWh
+
+        Shelly.set_kvs('poolcontrol','CurrentMarketPrice',current_price.round(0))
+
+  end
+
+
 
 end
