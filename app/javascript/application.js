@@ -12,6 +12,8 @@ import ArticlesCtrl from './controllers/articles'
 import RemoteModal  from './components/remote_modal'
 import Tooltip      from './components/tooltip'
 
+import "./good_job_custom.js";
+
 const App = new RalixApp({
   routes: {
     '/articles$': ArticlesCtrl,

@@ -1,0 +1,17 @@
+/* app/assets/stylesheets/good_job_custom.css */
+
+/* Stellt den Header auf Flexbox ein, um das Link-Element
+   einfach positionieren zu können */
+.good_job-header {
+  display: flex;
+  align-items: center;
+}
+
+/* Positioniert den Link ganz rechts im Header */
+.good_job-header__title {
+  flex-grow: 1; /* Der Titel füllt den verbleibenden Platz */
+}
+
+.good_job-header__nav {
+  margin-left: auto; /* Schiebt die Navigation nach rechts */
+}

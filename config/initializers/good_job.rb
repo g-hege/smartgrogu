@@ -4,7 +4,7 @@ Rails.application.configure do
 	# Aktiviert den Bereinigungs-Worker
 	config.good_job.enable_purge = true
 
-	config.good_job.enable_cron = true
+	config.good_job.enable_cron = Rails.env.production?
 
 	# Konfiguriert die Löschregeln für erfolgreich abgeschlossene Jobs
 	config.good_job.successful_executions_retention_period = 1.days
