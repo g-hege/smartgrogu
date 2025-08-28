@@ -39,7 +39,7 @@ class EpexImporter
                         .pluck(:marketprice)
                         .first.to_f / 10.0 #   cent/kWh
 
-        Shelly.set_kvs('poolcontrol','CurrentMarketPrice',current_price.round(0))
+        Shelly.set_kvs('poolcontrol','CurrentMarketPrice',current_price.round(1))
 
   end
 
