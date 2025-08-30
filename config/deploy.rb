@@ -22,7 +22,7 @@ set :deploy_to, "/var/www/smartgrogu"
 # Default value for :pty is false
 # set :pty, true
 
-set :linked_files, %w{config/database.yml config/secrets.yml config/master.key .env}
+set :linked_files, %w{config/database.yml config/secrets.yml config/master.key config/google_tokens.json .env}
 
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets tmp/state vendor/bundle public/system public/uploads}
 
