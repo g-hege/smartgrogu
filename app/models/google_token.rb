@@ -22,24 +22,3 @@ class GoogleToken < ApplicationRecord
   end
 end
 
-
-
-=begin
-  
-rescue StandardError => e
-  def google_service
-  token = current_user.google_token
-  token.refresh! if token.expired?
-
-  service = Google::Apis::SheetsV4::SheetsService.new
-  service.authorization = Signet::OAuth2::Client.new(
-    access_token: token.access_token
-  )
-  
-  service
-end
-=end
-
-
-  
-end
