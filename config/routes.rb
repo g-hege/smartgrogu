@@ -20,6 +20,10 @@ Rails.application.routes.draw do
 
   get "/pages/:page" => "pages#show", as: :page
 
+  get '/auth/google', to: 'google_auth#authorize'
+  get '/oauth2callback', to: 'google_auth#callback'
+
+
   match '/404', to: 'errors#not_found', via: :all
   match '/422', to: 'errors#internal_server_error', via: :all
   match '/500', to: 'errors#internal_server_error', via: :all

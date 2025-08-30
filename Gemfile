@@ -31,6 +31,11 @@ gem 'roo' # excel read
 gem 'grape'
 gem 'grape-jbuilder'
 
+gem 'google-api-client'
+gem 'googleauth'
+gem 'signet'
+
+
 gem 'capistrano', '~> 3.18'
 gem 'capistrano-rails'
 gem 'capistrano-rvm' # Nutze capistrano-rbenv, wenn du rbenv verwendest. Ansonsten capistrano-rvm.
