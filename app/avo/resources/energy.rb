@@ -6,7 +6,7 @@ class Avo::Resources::Energy < Avo::BaseResource
   self.translation_key = "avo.resource_translations.energy"
 
   self.default_sort_column = :day
-  self.default_sort_direction = :asc  
+  self.default_sort_direction = :desc  
 
 
 #  self.name = 'Energy'
