@@ -1,6 +1,16 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2
-    omniauth_callback('Google', 'google_data')
+
+    @user = User.find_by(email: auth.info.email)
+
+    if @user
+      omniauth_callback('Google', 'google_data')
+#      sign_in_and_redirect @user, event: :authentication # Meldet den Benutzer an und leitet weiter
+    else
+      redirect_to root_path, alert: "Sie haben keine Berechtigung, sich mit diesem Google-Konto anzumelden."
+    end
+
+
   end
 
   def github
@@ -14,6 +24,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   private
 
   def omniauth_callback(kind, session_key)
+
+
     @user = User.from_omniauth(request.env['omniauth.auth'])
 
     if @user.persisted?
