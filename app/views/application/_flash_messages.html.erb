@@ -1,6 +1,14 @@
-<% flash.each do |key, msg| %>
-  <div class="flex items-center justify-between px-8 py-4 bg-amber-100">
-    <%= msg %>
-    <button onclick="closeFlashAlert()"><%= heroicon "x-mark" %></button>
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <div 
+    class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 max-w-md w-full px-4"
+    data-controller="flash"
+  >
+    <div class="
+      px-4 py-3 rounded-md shadow-lg text-white text-center animate-fade-in-down
+      <%= type == 'alert' ? 'bg-red-600' : 'bg-green-600' %>
+    ">
+      <%= message %>
+    </div>
   </div>
 <% end %>
