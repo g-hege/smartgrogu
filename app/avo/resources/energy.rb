@@ -12,7 +12,10 @@ class Avo::Resources::Energy < Avo::BaseResource
   #self.actions = []
   #self.visible_on = :index
 
-
+  def self.available_actions
+    [:index, :show]
+  end
+  
 #  self.name = 'Energy'
 
   # self.includes = []
