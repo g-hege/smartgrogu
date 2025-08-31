@@ -32,6 +32,7 @@ gem 'grape'
 gem 'grape-jbuilder'
 
 gem 'google-api-client'
+gem 'google-apis-sheets_v4'
 gem 'googleauth'
 gem 'signet'
 

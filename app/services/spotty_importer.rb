@@ -178,9 +178,10 @@ puts "🏁 Import abgeschlossen! #{import_count} neue Datensätze importiert, #{
 
 			Energy.where(real_wiener_netze: nil).each do |energyday|
 				 	day_consumption = (Spotty.where( timestamp: energyday.day.all_day).sum(:consumption) || 0).to_f
+				 	grid_price_netto = (Spotty.where("DATE(timestamp) = ?", energyday.day).sum("consumption * price")).to_f/100
 					puts "#{energyday.day} ->  #{day_consumption}"
 				 	if day_consumption > 0
-				 		energyday.update(real_wiener_netze: day_consumption)
+				 		energyday.update(real_wiener_netze: day_consumption, grid_price_netto: grid_price_netto)
 				 	end
 			end
 
@@ -188,5 +189,4 @@ puts "🏁 Import abgeschlossen! #{import_count} neue Datensätze importiert, #{
 
 
 end
-
 

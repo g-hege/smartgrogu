@@ -217,6 +217,8 @@ GEM
       google-apis-core (>= 0.15.0, < 2.a)
       google-apis-discovery_v1 (~> 0.18)
       thor (>= 0.20, < 2.a)
+    google-apis-sheets_v4 (0.45.0)
+      google-apis-core (>= 0.15.0, < 2.a)
     google-cloud-env (2.3.1)
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.a)
@@ -517,6 +519,7 @@ DEPENDENCIES
   dotenv-rails
   good_job (~> 4.11)
   google-api-client
+  google-apis-sheets_v4
   googleauth
   grape
   grape-jbuilder

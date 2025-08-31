@@ -14,4 +14,13 @@ class GoogleTokenStore
     data = JSON.parse(File.read(TOKEN_FILE))
     data.transform_keys(&:to_sym)
   end
+  
+  def self.get_token
+    return nil unless File.exist?(TOKEN_FILE)
+
+    data = JSON.parse(File.read(TOKEN_FILE))
+    data['access_token']
+  end
+
+
 end
