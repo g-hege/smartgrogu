@@ -69,4 +69,6 @@ Rails.application.configure do
 
   config.log_level = :info
 
+  config.hosts << "grogu.ddns.net"
+
 end
