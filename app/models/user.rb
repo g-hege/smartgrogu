@@ -16,12 +16,17 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
-    data = auth.info
 
-    User.where(email: data['email']).first_or_create do |user|
-      user.name = data['name']
-      user.password = Devise.friendly_token[0,20] if user.new_record?
+    user = find_by(email: auth.info.email)
+
+    if user
+      data = auth.info
+      User.where(email: data['email']).first_or_create do |user|
+        user.name = data['name']
+        user.password = Devise.friendly_token[0,20] if user.new_record?
+      end
     end
+    
   end
 
   def self.ransackable_attributes(auth_object = nil)
