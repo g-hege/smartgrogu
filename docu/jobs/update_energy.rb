@@ -2,14 +2,15 @@ class UpdateEnergie
 
 	def self.run
 
-		startdate = Spotty.minimum(:timestamp).to_date
+		startdate = Consumption.minimum(:timestamp).to_date
 		enddate = Energy.minimum(:day) - 1.day
 
+# enddate 04 Mar 2024
 
 		(startdate..enddate).each do |calc_day|
-			sums = Spotty.where("DATE(timestamp) = ?", calc_day)
-			real_wiener_netze = sums.sum(:consumption)
-			price_netto = sums.sum("consumption * price")
+			sums = Consumption.where(device: 'wienstrom').where("DATE(timestamp) = ?", calc_day)
+			real_wiener_netze = sums.sum(:value)/1000
+			price_netto = 0
 		
 			solar_sums = Consumption.where(device: 'solar').where("DATE(timestamp) = ?", calc_day)
 			solar_self_consumed = solar_sums.sum(:value)
