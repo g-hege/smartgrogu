@@ -9,9 +9,9 @@ class Avo::Resources::Energy < Avo::BaseResource
   self.default_sort_direction = :desc  
 
   # Deaktiviert die Aktionen 'Edit', 'Destroy' und 'Create'
-  self.actions = []
-  self.visible_on = :index
-  
+  #self.actions = []
+  #self.visible_on = :index
+
 
 #  self.name = 'Energy'
 
