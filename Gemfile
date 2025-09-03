@@ -20,7 +20,7 @@ gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "cancancan", "~> 3.4"
 
 # additonal by hege
-gem "avo", ">= 3.2.1"
+gem "avo"
 gem 'mqtt', :github => 'njh/ruby-mqtt'
 gem 'terminal-table'
 gem 'colorize'

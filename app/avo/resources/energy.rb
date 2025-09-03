@@ -8,24 +8,9 @@ class Avo::Resources::Energy < Avo::BaseResource
   self.default_sort_column = :day
   self.default_sort_direction = :desc  
 
-  # Deaktiviert die Aktionen 'Edit', 'Destroy' und 'Create'
-  #self.actions = []
-  #self.visible_on = :index
 
-  def self.available_actions
-    [:index, :show]
-  end
-  
-#  self.name = 'Energy'
-
-  # self.includes = []
-  # self.attachments = []
-  # self.search = {
-  #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
-  # }
-  
-  def fields
-    field :id, as: :id, except_on: [:forms, :index]
+   def fields
+    field :id, as: :id, except_on: [:forms, :index, :show]
     field :day, as: :date, sortable: true
     field :grid_consumed, as: :number
     field :real_wiener_netze, as: :number
@@ -34,4 +19,6 @@ class Avo::Resources::Energy < Avo::BaseResource
     field :autarky_rate, as: :number
     field :self_consumed_rate, as: :number
   end
+
+
 end

@@ -106,7 +106,9 @@ class MqttPublisherJob < ApplicationJob
     emdata = Shelly.get_device_value('energy','Shelly.GetStatus')
     current_power_grid = emdata["em:0"]['total_act_power'].to_f
 
-    usage_last_days = Energy.where.not(real_wiener_netze: nil).order(day: :desc).limit(3).pluck(:real_wiener_netze) 
+    energyarr = Energy.order(day: :desc).limit(4).pluck(:real_wiener_netze, :grid_consumed) 
+    energyarr.shift
+    usage_last_days = energyarr.map{|b| b[0].nil? ? b[1] : b[0]}
 
     begin
 
