@@ -29,7 +29,7 @@ module API
             Rails.logger.error "API Post::DailyRuntime - device: #{device} not configured!"
           end
 
-          Rails.logger.info "API Post::DailyRuntime"
+#          Rails.logger.info "API Post::DailyRuntime"
           { status: 'success!!', message: 'data saved' }
 
         end
