@@ -15,7 +15,6 @@ module API
         end
 
         post do
-
           shelly_config = Rails.application.credentials.shelly.device.find { |key, value| value[:id] == params[:device_id] }
           if !shelly_config.nil?
             device = shelly_config.first.to_s
@@ -25,7 +24,7 @@ module API
             record.device = device
             record.runtime = params[:runtime]
             record.save
-            Rails.logger.info "#{params[:device_id]} - #{params[:day]} | #{device} -> #{params[:runtime]}"
+#            Rails.logger.info "#{params[:device_id]} - #{params[:day]} | #{device} -> #{params[:runtime]}"
           else
             Rails.logger.error "API Post::DailyRuntime - device: #{device} not configured!"
           end
