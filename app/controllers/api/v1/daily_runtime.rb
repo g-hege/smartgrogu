@@ -25,6 +25,8 @@ module API
             record.device = device
             record.runtime = params[:runtime]
             record.save
+          else
+            Rails.logger.error "API Post::DailyRuntime - device: #{device} not configured!"
           end
 
           Rails.logger.info "API Post::DailyRuntime"
