@@ -1,3 +1,5 @@
+EDITOR="nano" rails credentials:edit
+
 
 rails generate model MyModel --no-migration
 

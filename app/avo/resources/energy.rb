@@ -13,6 +13,7 @@ class Avo::Resources::Energy < Avo::BaseResource
     field :id, as: :id, except_on: [:forms, :index, :show]
     field :day, as: :date, sortable: true
     field :grid_consumed, as: :number
+    field :grid_price_netto, as: :number
     field :real_wiener_netze, as: :number
     field :solar_self_consumed, as: :number
     field :solar_to_grid, as: :number
