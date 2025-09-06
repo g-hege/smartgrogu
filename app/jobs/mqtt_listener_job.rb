@@ -56,7 +56,7 @@ class MqttListenerJob < ApplicationJob
         return
       end
       topic = actual_dev[:device]
-      next if m[actual_dev[:param]].nil?
+      return if m[actual_dev[:param]].nil?
       Rails.logger.info "device: #{topic}: #{m[actual_dev[:param]]} #{actual_dev[:unit]}"
       case topic
       when 'pump-mode'
