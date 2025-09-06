@@ -1,0 +1,124 @@
+---
+engine_version: 0.4.37
+file_version: 2025-09-06 06:56:11.423220000 +02:00
+resources:
+- name: action_text/encrypted_rich_text
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:10:10.210243000 +02:00
+- name: article
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:10:08.337809000 +02:00
+- name: crypto
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:10:02.879603000 +02:00
+- name: energy
+  preferences:
+    columns:
+    - access_type: hidden
+      name: updated_at
+    - access_type: hidden
+      name: created_at
+    - access_type: hidden
+      name: id
+  updated_at: 2025-09-06 06:56:11.423220000 +02:00
+- name: epex
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:11:03.215281000 +02:00
+- name: good_job/batch_record
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:40.618152000 +02:00
+- name: good_job/discrete_execution
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:42.188321000 +02:00
+- name: good_job/execution
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:43.396976000 +02:00
+- name: good_job/job
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:44.266589000 +02:00
+- name: good_job/process
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:46.884305000 +02:00
+- name: good_job/setting
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:48.128022000 +02:00
+- name: user
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:52.715306000 +02:00
+- name: weather
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:56.943034000 +02:00
+- name: weather_forecast
+  preferences:
+    visible: false
+  updated_at: 2025-09-06 06:09:56.125776000 +02:00
+configs:
+- key: header.links
+  value:
+  - name: "⭐ Star on GitHub"
+    path: https://github.com/motor-admin/motor-admin-rails
+  updated_at: 2025-09-06 06:07:50.783060000 +02:00
+- key: resources.energy.columns.order
+  value:
+  - id
+  - day
+  - grid_consumed
+  - real_wiener_netze
+  - grid_price_netto
+  - solar_self_consumed
+  - solar_to_grid
+  - autarky_rate
+  - self_consumed_rate
+  - updated_at
+  - created_at
+  updated_at: 2025-09-06 06:12:46.376630000 +02:00
+- key: resources.order
+  value:
+  - energy
+  - action_text/encrypted_rich_text
+  - article
+  - active_storage/attachment
+  - config_data
+  - consumption
+  - crypto
+  - daily_runtime
+  - epex
+  - good_job/batch_record
+  - good_job/discrete_execution
+  - good_job/execution
+  - good_job/job
+  - good_job/process
+  - good_job/setting
+  - recording
+  - solar_forecast_day
+  - solar_forecast
+  - solarweek
+  - spotty
+  - twilight_data
+  - user
+  - weather_forecast
+  - weather
+  updated_at: 2025-09-06 06:10:56.481910000 +02:00
+queries: []
+dashboards: []
+forms: []
+alerts: []
+api_configs:
+- id: 1
+  name: origin
+  url: "/"
+  preferences: {}
+  description: 
+  updated_at: 2025-09-06 06:07:50.842199000 +02:00

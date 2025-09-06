@@ -7,7 +7,7 @@ module API
       prefix :api
 
       resource :daily_runtime do
-        desc 'Creates a new daily consumption record for a Shelly device'
+        desc 'Creates or update a new daily runtime record for a Shelly device'
         params do
           requires :device_id, type: String, desc: 'The unique ID of the Shelly device'
           requires :day, type: Date, desc: 'Date of the measurement'

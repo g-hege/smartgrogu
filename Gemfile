@@ -20,6 +20,7 @@ gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "cancancan", "~> 3.4"
 
 # additonal by hege
+gem "motor-admin", "~> 0.4.37"
 gem "avo"
 gem 'mqtt', :github => 'njh/ruby-mqtt'
 gem 'terminal-table'
@@ -56,6 +57,8 @@ group :development do
   gem "debug"
   gem "dotenv-rails"
 end  
+
+
 
 
 

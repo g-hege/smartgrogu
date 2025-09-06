@@ -98,13 +98,16 @@ class ShellyCloud
     data_in_body = 'history'
     data_in_body = 'sum' if Rails.application.credentials.shelly.device[device][:type] == 'em-3p'
     total_day = 0
+#    puts body[data_in_body]
     body[data_in_body].each do |hourdata|
       next if !hourdata['missing'].nil?
+      next if hourdata['tariff_id'] == '0' && Rails.application.credentials.shelly.device[device][:type] == 'em-3p'
        local_time = ActiveSupport::TimeZone[timezone].parse(hourdata['datetime'])
        datarow = Consumption.find_or_initialize_by(
         device: device, timestamp: local_time
        )
        datarow.value = hourdata['consumption']
+#       puts hourdata['consumption'].to_f
        datarow.reversed = hourdata['reversed']
        datarow.cost = hourdata['cost']
        datarow.save!
