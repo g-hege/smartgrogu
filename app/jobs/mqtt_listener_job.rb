@@ -53,7 +53,7 @@ class MqttListenerJob < ApplicationJob
         m = JSON.parse(message)
       rescue JSON::ParserError => e
         Rails.logger.warn "Skipping invalid JSON message from topic '#{topic}': #{message.inspect}. Error: #{e.message}"
-        next # Überspringt die aktuelle fehlerhafte Nachricht
+        return
       end
       topic = actual_dev[:device]
       next if m[actual_dev[:param]].nil?
