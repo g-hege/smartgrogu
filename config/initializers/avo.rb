@@ -18,29 +18,30 @@ Avo.configure do |config|
   end
 
   ## == Authentication ==
-  # config.current_user_method = :current_user
+  config.current_user_method = :current_user
   # config.authenticate_with do
   # end
 
   ## == Authorization ==
   # config.is_admin_method = :is_admin
   # config.is_developer_method = :is_developer
-  # config.authorization_methods = {
-  #   index: 'index?',
-  #   show: 'show?',
-  #   edit: 'edit?',
-  #   new: 'new?',
-  #   update: 'update?',
-  #   create: 'create?',
-  #   destroy: 'destroy?',
-  #   search: 'search?',
-  # }
+ 
+   config.authorization_methods = {
+     index: 'index?',
+     show: 'show?',
+     edit: 'edit?',
+     new: 'new?',
+     update: 'update?',
+     create: 'create?',
+     destroy: 'destroy?',
+     search: 'search?',
+   }
   # config.raise_error_on_missing_policy = false
-  config.authorization_client = nil
+  config.authorization_client = :pundit
   config.explicit_authorization = true
 
   ## == Localization ==
-  # config.locale = 'en-US'
+#  config.locale = 'de-DE'
 
   ## == Resource options ==
   # config.resource_row_controls_config = {
@@ -135,10 +136,10 @@ Avo.configure do |config|
   # }
 
   ## == Breadcrumbs ==
-  # config.display_breadcrumbs = true
-  # config.set_initial_breadcrumbs do
-  #   add_breadcrumb "Home", '/avo'
-  # end
+   config.display_breadcrumbs = true
+   config.set_initial_breadcrumbs do
+     add_breadcrumb "Home", '/'
+   end
 
   ## == Menus ==
   # config.main_menu = -> {

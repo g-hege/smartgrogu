@@ -36,7 +36,7 @@ gem 'google-api-client'
 gem 'google-apis-sheets_v4'
 gem 'googleauth'
 gem 'signet'
-
+gem "pundit"
 
 gem 'capistrano', '~> 3.18'
 gem 'capistrano-rails'
