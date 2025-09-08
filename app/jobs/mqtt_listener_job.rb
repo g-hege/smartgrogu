@@ -19,11 +19,7 @@ class MqttListenerJob < ApplicationJob
           when /^c4set/
             mqtt_c4set(topic, message)
           when /^temp-wz\/status\/temperature:0/
-             Rails.logger.info '========================================='
-             Rails.logger.info "#{topic} - #{message}"
              m = JSON.parse(message)
-             Rails.logger.info "#{m["tC"]}"
-             Rails.logger.info '========================================='
              rec = {device: 'temp-wz2', value: m["tC"]}
              Recording.create(rec)             
           end

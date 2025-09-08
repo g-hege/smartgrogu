@@ -190,7 +190,7 @@ class MqttPublisherJob < ApplicationJob
   end
 
   def homematic_recording
-    %w{temp-garden humidity-garden temp-loggia humidity-loggia temp-wz humidity-wz}
+    %w{temp-garden humidity-garden temp-loggia humidity-loggia temp-wz humidity-wz temp-wz2}
   end
 
 
