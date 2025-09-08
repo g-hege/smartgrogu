@@ -22,6 +22,7 @@ gem "cancancan", "~> 3.4"
 # additonal by hege
 #gem "motor-admin", "~> 0.4.37"
 gem "avo"
+gem "avo-money_field"
 gem 'mqtt', :github => 'njh/ruby-mqtt'
 gem 'terminal-table'
 gem 'colorize'

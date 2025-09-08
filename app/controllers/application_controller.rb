@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  
+  include Pundit::Authorization
   include Pagy::Backend
 
   rescue_from CanCan::AccessDenied do |exception|

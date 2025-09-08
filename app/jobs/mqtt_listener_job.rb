@@ -18,8 +18,11 @@ class MqttListenerJob < ApplicationJob
           case topic
           when /^c4set/
             mqtt_c4set(topic, message)
-          when /^temp-wz/
+          when /^temp-wz\/events\/rpc/
+             Rails.logger.info '========================================='
              Rails.logger.info "#{topic} - #{message}"
+             Rails.logger.info "#{message["temperature:0"]}"
+             Rails.logger.info '========================================='             
 #          next if !mqtt_subscribed.any? { |filter_string| topic.start_with?(filter_string) }
           #Rails.logger.info "device: #{topic}"
           end
