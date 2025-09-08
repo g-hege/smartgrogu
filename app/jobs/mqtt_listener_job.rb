@@ -21,7 +21,8 @@ class MqttListenerJob < ApplicationJob
           when /^temp-wz\/status\/temperature:0/
              Rails.logger.info '========================================='
              Rails.logger.info "#{topic} - #{message}"
-             Rails.logger.info "#{message["tC"]}"
+             m = JSON.parse(message)
+             Rails.logger.info "#{m["tC"]}"
              Rails.logger.info '========================================='             
 #          next if !mqtt_subscribed.any? { |filter_string| topic.start_with?(filter_string) }
           #Rails.logger.info "device: #{topic}"

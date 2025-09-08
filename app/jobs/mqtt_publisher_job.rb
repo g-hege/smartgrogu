@@ -84,7 +84,7 @@ class MqttPublisherJob < ApplicationJob
     solar_forecast_today = (SolarForecastDay.where(day: Date.today).pluck(:pv_estimate10).first || 0).to_f
     solar_forecast_tomorrow = (SolarForecastDay.where(day: (Date.today + 1)).pluck(:pv_estimate10).first || 0).to_f
 
-    poolcontrol_addon = Shelly.get_value('poolcontrol','Temperature.GetStatus?id=101')
+    poolcontrol_addon = Shelly.get_value('poolcontrol','Temperature.GetStatus?id=100')
     pool_temp = poolcontrol_addon.nil? ? 'NV' :poolcontrol_addon['tC']
 
     hm_data = {}
