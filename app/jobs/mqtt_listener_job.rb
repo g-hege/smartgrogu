@@ -24,7 +24,7 @@ class MqttListenerJob < ApplicationJob
              m = JSON.parse(message)
              Rails.logger.info "#{m["tC"]}"
              Rails.logger.info '========================================='
-             rec = {device: 'temp-wz', value: m["tC"]}
+             rec = {device: 'temp-wz2', value: m["tC"]}
              Recording.create(rec)             
           end
         end
