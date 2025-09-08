@@ -23,9 +23,9 @@ class MqttListenerJob < ApplicationJob
              Rails.logger.info "#{topic} - #{message}"
              m = JSON.parse(message)
              Rails.logger.info "#{m["tC"]}"
-             Rails.logger.info '========================================='             
-#          next if !mqtt_subscribed.any? { |filter_string| topic.start_with?(filter_string) }
-          #Rails.logger.info "device: #{topic}"
+             Rails.logger.info '========================================='
+             rec = {device: 'temp-wz', value: m["tC"]}
+             Recording.create(rec)             
           end
         end
       end
