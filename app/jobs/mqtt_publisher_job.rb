@@ -95,7 +95,7 @@ class MqttPublisherJob < ApplicationJob
 
     ht_sz = ShellyCloud.event_log("XB137192906423351")
     hm_data['temp-sz'] = ht_sz[:temp] if !ht_sz.nil?
-    hm_data['humidity-sz' = ht_sz[:humidity] if !ht_sz.nil?
+    hm_data['humidity-sz'] = ht_sz[:humidity] if !ht_sz.nil?
 
     # Bitcoin-Preis abrufen
     bitcoin = Crypto.where(slug: 'bitcoin').order(last_updated: :desc).first&.price || 0
