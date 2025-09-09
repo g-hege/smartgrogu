@@ -6,8 +6,8 @@ class ShellyCloud
     new().import(singledevice, date_from)
   end
 
-  def self.event_log(deviceid)
-    new().event_log(deviceid)
+  def self.event_log(device)
+    new().event_log(device)
   end
 
   def initialize()
@@ -120,11 +120,16 @@ class ShellyCloud
     total_day
   end
 
-  def event_log(deviceid)
+  def event_log(device)
     unless @shelly_token
       puts "no shelly token!"
       return nil if @shelly_token.nil?    
     end
+
+    deviceid = Rails.application.credentials.shelly.device[device][:id] rescue nil
+    devicetype = Rails.application.credentials.shelly.device[device][:type] rescue nil
+
+    return nil if deviceid.nil?
 
     uri = URI("#{@shelly_uri}/statistics/event-log")
     http = Net::HTTP.new(uri.host, uri.port)
@@ -140,8 +145,15 @@ class ShellyCloud
 
     if response.is_a?(Net::HTTPSuccess)
       body = JSON.load(response.body)
-       d = JSON.load(body["result"][deviceid].first["p"])
-       return {device: d[0], temp: d[1], humidity: d[2], batterie: d[3]}
+      d = JSON.load(body["result"][deviceid].first["p"])
+      case devicetype
+      when 'bluht'
+        return {device: d[0], temp: d[1], humidity: d[2], batterie: d[3]}
+      when 'htg3'
+        return {device: d[0], temp: d[2], humidity: d[4], batterie: d[3]}
+      else
+        return nil
+      end
     elsif response.is_a?(Net::HTTPClientError)
       # Client-Fehler (4xx Statuscode)
       Rails.logger.error "ShellyCloud Client-Error: #{response.code} #{response.message}"
