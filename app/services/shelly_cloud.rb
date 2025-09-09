@@ -140,8 +140,8 @@ class ShellyCloud
 
     if response.is_a?(Net::HTTPSuccess)
       body = JSON.load(response.body)
-       d = JSON.load(body["result"][deviceid].last["p"])
-       return {device: d[0], temp: d[1], hum: d[2], batterie: d[3]}
+       d = JSON.load(body["result"][deviceid].first["p"])
+       return {device: d[0], temp: d[1], humidity: d[2], batterie: d[3]}
     elsif response.is_a?(Net::HTTPClientError)
       # Client-Fehler (4xx Statuscode)
       Rails.logger.error "ShellyCloud Client-Error: #{response.code} #{response.message}"
