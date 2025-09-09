@@ -100,7 +100,7 @@ class MqttPublisherJob < ApplicationJob
       ht_wz = ShellyCloud.event_log("ht_wz")
       hm_data['temp-wz2'] = ht_wz[:temp] if !ht_sz.nil?
       hm_data['humidity-wz2'] = ht_wz[:humidity] if !ht_sz.nil?
-    resque
+    rescue
     end
     # Bitcoin-Preis abrufen
     bitcoin = Crypto.where(slug: 'bitcoin').order(last_updated: :desc).first&.price || 0
