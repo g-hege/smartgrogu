@@ -18,10 +18,11 @@ class MqttListenerJob < ApplicationJob
           case topic
           when /^c4set/
             mqtt_c4set(topic, message)
-          when /^temp-wz\/status\/temperature:0/
-             m = JSON.parse(message)
-             rec = {device: 'temp-wz2', value: m["tC"]}
-             Recording.create(rec)             
+# now ht_wz = ShellyCloud.event_log("ht_wz")            
+#          when /^temp-wz\/status\/temperature:0/
+#             m = JSON.parse(message)
+#             rec = {device: 'temp-wz2', value: m["tC"]}
+#             Recording.create(rec)             
           end
         end
       end
