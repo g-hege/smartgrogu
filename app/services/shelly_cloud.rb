@@ -6,6 +6,10 @@ class ShellyCloud
     new().import(singledevice, date_from)
   end
 
+  def self.event_log(deviceid)
+    new().event_log(deviceid)
+  end
+
   def initialize()
     uri = URI.parse('https://api.shelly.cloud/auth/login')
     http = Net::HTTP.new(uri.host, uri.port)
@@ -116,9 +120,48 @@ class ShellyCloud
     total_day
   end
 
+  def event_log(deviceid)
+    unless @shelly_token
+      puts "no shelly token!"
+      return nil if @shelly_token.nil?    
+    end
+
+    uri = URI("#{@shelly_uri}/statistics/event-log")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
+    request['Authorization'] = "Bearer #{@shelly_token}"
+    data = {
+      'tags': [deviceid],
+      'limit': 5
+    }
+    request.body = data.to_json
+    response = http.request(request)
+
+    if response.is_a?(Net::HTTPSuccess)
+      body = JSON.load(response.body)
+       d = JSON.load(body["result"][deviceid].last["p"])
+       return {device: d[0], temp: d[1], hum: d[2], batterie: d[3]}
+    elsif response.is_a?(Net::HTTPClientError)
+      # Client-Fehler (4xx Statuscode)
+      Rails.logger.error "ShellyCloud Client-Error: #{response.code} #{response.message}"
+      Rails.logger.error "body: #{response.body}"
+    elsif response.is_a?(Net::HTTPServerError)
+      # Server-Fehler (5xx Statuscode)
+      Rails.logger.error "ShellyCloud Server-Error: #{response.code} #{response.message}"
+      Rails.logger.error "body: #{response.body}"
+    else
+      # Andere Fehler oder Weiterleitungen (z.B. 3xx)
+      Rails.logger.error "ShellyCloud Status: #{response.code} #{response.message}"
+      Rails.logger.error "body: #{response.body}"
+    end
+    nil
+  end
+
+
   def self.update_market_price
 
-    uri = URI("https://shelly-77-eu.shelly.cloud/v2/user/pp-ltu/#{Rails.application.credentials.shelly.live_tarif_token}")
+    uri = URI("#{@shelly_uri}/v2/user/pp-ltu/#{Rails.application.credentials.shelly.live_tarif_token}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
