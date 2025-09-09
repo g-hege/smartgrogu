@@ -10,6 +10,10 @@ class ShellyCloud
     new().event_log(device)
   end
 
+  def self.update_market_price
+    new().update_market_price
+  end
+
   def initialize()
     uri = URI.parse('https://api.shelly.cloud/auth/login')
     http = Net::HTTP.new(uri.host, uri.port)
@@ -171,12 +175,13 @@ class ShellyCloud
   end
 
 
-  def self.update_market_price
+  def update_market_price
 
     uri = URI("#{@shelly_uri}/v2/user/pp-ltu/#{Rails.application.credentials.shelly.live_tarif_token}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
+    request['Authorization'] = "Bearer #{@shelly_token}"
     data = {
       price: (
         Epex
