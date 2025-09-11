@@ -27,4 +27,10 @@ en:
         other: "Solar Forecast"
       epex:
         one: "Epex Rate"
-        other: "Epex Rate"        
+        other: "Epex Rate"
+      energymonthly:
+        one: "Energy Monat"
+        other: "Energy Monat"
+      energyyearly:
+        one: "Energy Year"
+        other: "Energy Year"
