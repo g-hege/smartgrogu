@@ -94,14 +94,18 @@ class MqttPublisherJob < ApplicationJob
     end
 
     begin
-      ht_sz = ShellyCloud.event_log("ht_sz")
-      hm_data['temp-sz'] = ht_sz[:temp] if !ht_sz.nil?
-      hm_data['humidity-sz'] = ht_sz[:humidity] if !ht_sz.nil?
-      ht_wz = ShellyCloud.event_log("ht_wz")
-      hm_data['temp-wz2'] = ht_wz[:temp] if !ht_sz.nil?
-      hm_data['humidity-wz2'] = ht_wz[:humidity] if !ht_sz.nil?
+      shellydata = ShellyCloud.devicestatus(['ht_wz','ht_sz'],['temperature:0','humidity:0'])
+      if !shellydata['ht_wz'].nil?
+        hm_data['temp-wz2'] = shellydata['ht_wz']['temperature:0']['tC']
+        hm_data['humidity-wz2'] = shellydata['ht_wz']['humidity:0']['rh']      
+      end
+      if !shellydata['ht_sz'].nil?
+        hm_data['temp-sz'] = shellydata['ht_sz']['temperature:0']['tC']
+        hm_data['humidity-sz'] = shellydata['ht_wz']['humidity:0']['rh']      
+      end
     rescue
     end
+
     # Bitcoin-Preis abrufen
     bitcoin = Crypto.where(slug: 'bitcoin').order(last_updated: :desc).first&.price || 0
     bitcoin = bitcoin.to_f.round(2)

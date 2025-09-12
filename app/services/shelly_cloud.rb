@@ -10,6 +10,10 @@ class ShellyCloud
     new().event_log(device)
   end
 
+  def self.devicestatus(devices, status_pick)
+    new().devicestatus(devices, status_pick)
+  end
+
   def self.update_market_price
     new().update_market_price
   end
@@ -222,7 +226,61 @@ class ShellyCloud
     
   end
 
+  def devicestatus(devices, status_pick)
+
+      ids = devices.map {|device|
+          Rails.application.credentials.shelly.device[device][:id] rescue nil
+      }
+
+      uri = URI("#{@shelly_uri}/v2/devices/api/get?auth_key=#{Rails.application.credentials.shelly.auth_key}")
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
+      request['Authorization'] = "Bearer #{@shelly_token}"
+      data = {ids: ids,select: ["status"], pick: {status: status_pick}}
+      request.body = data.to_json
+      response = http.request(request)         
+      if response.is_a?(Net::HTTPSuccess)
+
+        body = JSON.load(response.body)
+        retrec = {}
+        body.each{|r|
+            devicename = Rails.application.credentials.shelly.device.key(Rails.application.credentials.shelly.device.find { |k, v| v[:id] == r['id'] }&.last).to_s
+            retrec[devicename] = r['status']
+        }
+        return retrec
+      elsif response.is_a?(Net::HTTPClientError)
+        # Client-Fehler (4xx Statuscode)
+        Rails.logger.error "ShellyCloud Client-Error: #{response.code} #{response.message}"
+        Rails.logger.error "body: #{response.body}"
+      elsif response.is_a?(Net::HTTPServerError)
+        # Server-Fehler (5xx Statuscode)
+        Rails.logger.error "ShellyCloud Server-Error: #{response.code} #{response.message}"
+        Rails.logger.error "body: #{response.body}"
+      else
+        # Andere Fehler oder Weiterleitungen (z.B. 3xx)
+        Rails.logger.error "ShellyCloud Status: #{response.code} #{response.message}"
+        Rails.logger.error "body: #{response.body}"
+      end
 
 
+  end
 
 end
+
+
+
+# note 
+=begin
+    curl -X POST 'https://shelly-77-eu.shelly.cloud/v2/devices/api/get?auth_key=Rails.application.credentials.shelly.auth_key' \
+    -H 'Content-Type: application/json' \
+    -d '{"ids":["e4b32331c504","XB137192906423351"],"select":["status"],"pick":{"status":["temperature:0"]}}'
+
+
+[{"id":"e4b32331c504","type":"sensor","code":"S3SN-0U12A","gen":"G2","online":1,
+"status":{"temperature:0":{"id":0,"tC":24.7,"tF":76.4}}},
+
+{"id":"XB137192906423351","type":"sensor","code":"SBHT-003C","gen":"GBLE","online":1,
+"status":{"temperature:0":{"id":0,"tC":24.4,"tF":75.92}}}]
+
+=end
