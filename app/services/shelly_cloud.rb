@@ -6,10 +6,6 @@ class ShellyCloud
     new().import(singledevice, date_from)
   end
 
-  def self.event_log(device)
-    new().event_log(device)
-  end
-
   def self.devicestatus(devices, status_pick)
     new().devicestatus(devices, status_pick)
   end
@@ -127,58 +123,7 @@ class ShellyCloud
     end
     total_day
   end
-
-  def event_log(device)
-    unless @shelly_token
-      puts "no shelly token!"
-      return nil if @shelly_token.nil?    
-    end
-
-    deviceid = Rails.application.credentials.shelly.device[device][:id] rescue nil
-    devicetype = Rails.application.credentials.shelly.device[device][:type] rescue nil
-
-    return nil if deviceid.nil?
-
-    uri = URI("#{@shelly_uri}/statistics/event-log")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
-    request['Authorization'] = "Bearer #{@shelly_token}"
-    data = {
-      'tags': [deviceid],
-      'limit': 5
-    }
-    request.body = data.to_json
-    response = http.request(request)
-
-    if response.is_a?(Net::HTTPSuccess)
-      body = JSON.load(response.body)
-      d = JSON.load(body["result"][deviceid].first["p"])
-      case devicetype
-      when 'bluht'
-        return {device: d[0], temp: d[1], humidity: d[2], batterie: d[3]}
-      when 'htg3'
-        return {device: d[0], temp: d[2], humidity: d[4], batterie: d[3]}
-      else
-        return nil
-      end
-    elsif response.is_a?(Net::HTTPClientError)
-      # Client-Fehler (4xx Statuscode)
-      Rails.logger.error "ShellyCloud Client-Error: #{response.code} #{response.message}"
-      Rails.logger.error "body: #{response.body}"
-    elsif response.is_a?(Net::HTTPServerError)
-      # Server-Fehler (5xx Statuscode)
-      Rails.logger.error "ShellyCloud Server-Error: #{response.code} #{response.message}"
-      Rails.logger.error "body: #{response.body}"
-    else
-      # Andere Fehler oder Weiterleitungen (z.B. 3xx)
-      Rails.logger.error "ShellyCloud Status: #{response.code} #{response.message}"
-      Rails.logger.error "body: #{response.body}"
-    end
-    nil
-  end
-
-
+  
   def update_market_price
 
     uri = URI("#{@shelly_uri}/v2/user/pp-ltu/#{Rails.application.credentials.shelly.live_tarif_token}")
@@ -210,6 +155,7 @@ class ShellyCloud
     response = http.request(request)
     if response.is_a?(Net::HTTPSuccess)
       Rails.logger.info "#{DateTime.now.strftime('%Y-%m-%d %H:%M')}: ShellyCloud set current price to #{data[:price].to_f.to_s}€"
+      true
     elsif response.is_a?(Net::HTTPClientError)
       # Client-Fehler (4xx Statuscode)
       Rails.logger.error "ShellyCloud Client-Error: #{response.code} #{response.message}"
@@ -223,7 +169,7 @@ class ShellyCloud
       Rails.logger.error "ShellyCloud Status: #{response.code} #{response.message}"
       Rails.logger.error "body: #{response.body}"
     end
-    
+    nil
   end
 
   def devicestatus(devices, status_pick)
@@ -262,8 +208,7 @@ class ShellyCloud
         Rails.logger.error "ShellyCloud Status: #{response.code} #{response.message}"
         Rails.logger.error "body: #{response.body}"
       end
-
-
+      nil
   end
 
 end
