@@ -10,6 +10,7 @@ class ArticlesController < ApplicationController
   end
 
   def show
+    @chartdata = EnergyMonthlyView.order(:month).pluck(:month, :real_wiener_netze).to_h
   end
 
   def new

@@ -5,8 +5,9 @@ import "trix"
 import "@rails/actiontext"
 
 
-
+import Chartkick from "chartkick"
 import "chartkick/chart.js"
+window.Chartkick = Chartkick
 
 
 // Controllers
