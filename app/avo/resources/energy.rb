@@ -9,6 +9,14 @@ class Avo::Resources::Energy < Avo::BaseResource
   self.default_sort_direction = :desc  
 
 
+  self.edit_controls = -> {
+    if record.persisted?
+      link_to "Visit board", 'test', color: :primary, style: :primary, icon: "avo/square-kanban"
+    end
+    default_controls
+  }
+
+
    def fields
     field :id, as: :id, except_on: [:forms, :index, :show]
     field :day, as: :date, sortable: true, readonly:  true
@@ -22,9 +30,9 @@ class Avo::Resources::Energy < Avo::BaseResource
 #      end
 #    }
 
-    field 'brutto', as: :number do 
-      sprintf('%.2f', record.grid_price_netto * 1.2)
-    end
+#    field 'brutto', as: :number do 
+#      sprintf('%.2f', record.grid_price_netto * 1.2)
+#    end
 
 
     field :solar_self_consumed, as: :number, readonly:  true
