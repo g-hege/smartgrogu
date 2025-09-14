@@ -27,6 +27,7 @@ gem 'mqtt', :github => 'njh/ruby-mqtt'
 gem 'terminal-table'
 gem 'colorize'
 gem "chartkick"
+gem 'chartjs-rails'
 gem "good_job", "~> 4.11"
 gem 'httparty'
 gem 'roo' # excel read
@@ -38,6 +39,9 @@ gem 'google-apis-sheets_v4'
 gem 'googleauth'
 gem 'signet'
 gem "pundit"
+gem 'groupdate'
+
+
 
 gem 'capistrano', '~> 3.18'
 gem 'capistrano-rails'

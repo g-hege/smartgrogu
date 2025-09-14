@@ -1,4 +1,6 @@
 <div class="card my-4">
+    <%= line_chart({ "2023-01-01": 10, "2023-01-02": 15, "2023-01-03": 7 }) %>
+
   <h1 class="card-title"><%= @article.title %></h1>
 
   <p class="card-subtitle">
@@ -13,3 +15,6 @@
     <%= link_to "Edit", edit_article_path(@article), class: 'btn' %>
   </div>
 </div>
+
+
+
