@@ -5,10 +5,8 @@ import "trix"
 import "@rails/actiontext"
 
 
-// app/javascript/application.js
-import "chartkick"
-import "chart.js" // Corrected import
 
+import "chartkick/chart.js"
 
 
 // Controllers
