@@ -8,6 +8,11 @@
 
     <% c.with_body do %>
 
+
+    <% @invoicedata = EnergyStatistics.invoice_data %>
+    <% @totaldata = EnergyStatistics.total_data(@invoicedata) %>
+
+
       <!-- Jahresauswahl -->
       <div class="mb-8 ">
         <%= form_with url: "/avo/dashboard", method: :get, local: true do %>
@@ -95,7 +100,7 @@
         <h2 class="text-lg font-semibold mb-2">Total seit 2015</h2>
       </div>
 
-      <!-- KPI-Cards -->
+      <!-- KPI-Cards all Year -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         <div class="p-4 rounded-xl shadow bg-white">
           <p class="text-sm text-gray-500">Gesamtverbrauch (Wien Energie)</p>
@@ -117,6 +122,16 @@
             <%= number_with_precision(Energy.sum(:solar_to_grid), precision: 2, delimiter: ".", separator: ",") %> kWh
           </p>
         </div>
+
+
+        <div class="p-4 rounded-xl shadow bg-white">
+          <p class="text-sm text-gray-500">Solar Ersparnis total</p>
+          <p class="text-lg font-semibold text-green-500">
+            <%= number_with_precision( @totaldata[:solar_self_price], precision: 2, delimiter: ".", separator: ",") %> €
+          </p>
+        </div>
+
+
 
       </div>
 
@@ -171,8 +186,6 @@
         <h2 class="text-lg font-semibold mb-2">Total invoice Summary</h2>
       </div>
 
-<% @invoicedata = EnergyStatistics.invoice_data %>
-<% @totaldata = EnergyStatistics.total_data(@invoicedata) %>
 
 <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
   <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -240,7 +253,7 @@
         <td class="py-3 px-6">
           <%= '%.2f' % @totaldata[:gebuehren] %> €
         </td>
-        <td class="py-3 px-6">
+        <td class="py-3 px-6 text-red-500">
           <%= '%.2f' % @totaldata[:brutto] %> €
         </td>
         <td class="py-3 px-6">
@@ -248,7 +261,7 @@
         <td class="py-3 px-6">
           <%= '%.2f' % @totaldata[:solar_self] %> kWh
         </td>
-        <td class="py-3 px-6">
+        <td class="py-3 px-6 text-green-500">
           <%= '%.2f' % @totaldata[:solar_self_price] %> €
         </td>
       </tr>
