@@ -8,8 +8,6 @@ import "@rails/actiontext"
 import "chartkick/chart.js"
 import Chartkick from "chartkick"
 
-Chartkick.use(Highcharts)         // Chartkick + Highcharts
-
 // Controllers
 import AppCtrl      from './controllers/app'
 import ArticlesCtrl from './controllers/articles'
