@@ -116,7 +116,13 @@ class EnergyStatistics
         data: EnergyMonthlyView.order(:month)
                .pluck(:month, :solar_self_consumed)
                .to_h
-      }
+      },
+      {
+        name: "Solar wasted",
+        data: EnergyMonthlyView.order(:month)
+               .pluck(:month, :solar_to_grid)
+               .to_h
+      }      
     ]
   end
 
