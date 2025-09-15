@@ -9,9 +9,9 @@
     <% c.with_body do %>
 
       <!-- Jahresauswahl -->
-      <div class="mb-8">
+      <div class="mb-8 ">
         <%= form_with url: "/avo/dashboard", method: :get, local: true do %>
-          <label for="year" class="mr-2 font-medium">Jahr auswählen:</label>
+          <label for="year" class="mr-2 font-medium mt-4 ml-4">Jahr auswählen:</label>
           <%= select_tag :year,
             options_for_select(
               Energy.group(Arel.sql("EXTRACT(YEAR FROM day)"))
@@ -25,13 +25,10 @@
         <% end %>
       </div>
 
-
-      
       <!-- Monats-Chart für ausgewähltes Jahr -->
-        <% selected_year = (request.query_parameters[:year] || Date.today.year).to_i %>
-      </div>
+      <% selected_year = (request.query_parameters[:year] || Date.today.year).to_i %>
 
-      <div class="p-4 rounded-xl shadow bg-white mt-8">
+      <div class="p-4 rounded-xl shadow bg-white mt-8 mb-4">
         <h2 class="text-lg font-semibold mb-2">Monatlicher Verbrauch <%= selected_year %></h2>
         <%= column_chart EnergyStatistics.by_month(selected_year).map { |name, data| { name: name, data: data } },
           xtitle: "Monat",
@@ -49,13 +46,14 @@
 
       <!-- KPI-Cards by year-->
 
-      <div class="mb-8 pl-4 md:pl-8">
+
+      <div class="p-4  shadow bg-white mt-2 mb-2">
         <h2 class="text-lg font-semibold mb-2">Jahr <%= selected_year %></h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
 
         <div class="p-4 rounded-xl shadow bg-white">
-          <p class="text-sm text-gray-500">Gesamtverbrauch (Netz)</p>
+          <p class="text-sm text-gray-500">Verbrauch Grid (Wien Energie)</p>
           <p class="text-lg font-semibold">
             <%= number_with_precision(Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{selected_year}")).sum(:real_wiener_netze), precision: 2, delimiter: ".", separator: ",") %> kWh
           </p>
@@ -76,6 +74,13 @@
         </div>
 
         <div class="p-4 rounded-xl shadow bg-white">
+          <p class="text-sm text-gray-500">Grid Price Netto</p>
+          <p class="text-lg font-semibold">
+            <%= number_with_precision(Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{selected_year}")).sum(:grid_price_netto), precision: 2, delimiter: ".", separator: ",") %> €
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl shadow bg-white">
           <p class="text-sm text-gray-500">Ø Autarkie-Rate</p>
           <p class="text-lg font-semibold"><%= EnergyStatistics.autarkie_rate_by_year(selected_year) %> %</p>
         </div>
@@ -86,16 +91,16 @@
         </div>
       </div>
 
-      <div class="mb-8 pl-4 md:pl-8">
-        <h2 class="text-lg font-semibold mb-2">Total</h2>
+      <div class="p-4  shadow bg-white mt-2 mb-2">
+        <h2 class="text-lg font-semibold mb-2">Total seit 2015</h2>
       </div>
 
       <!-- KPI-Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         <div class="p-4 rounded-xl shadow bg-white">
-          <p class="text-sm text-gray-500">Gesamtverbrauch (Netz)</p>
+          <p class="text-sm text-gray-500">Gesamtverbrauch (Wien Energie)</p>
           <p class="text-lg font-semibold">
-            <%= number_with_precision(Energy.sum(:real_wiener_netze), precision: 2, delimiter: ".", separator: ",") %> kWh
+            <%= number_with_precision(62258 + Energy.sum(:real_wiener_netze), precision: 2, delimiter: ".", separator: ",") %> kWh
           </p>
         </div>
 
@@ -144,9 +149,9 @@
       <!-- Weitere Charts Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         <div class="p-4 rounded-xl shadow bg-white">
-          <h2 class="text-lg font-semibold mb-2">Solar-Verteilung</h2>
+          <h2 class="text-lg font-semibold mb-2">Solar-Anteil seit 1-Aug 2023</h2>
           <%= pie_chart({
-              "Wien Strom" => Energy.sum(:real_wiener_netze),
+              "Wien Strom" => Energy.where("day > ?", "2023-08-01").sum(:real_wiener_netze),
               "Eigenverbrauch" => Energy.sum(:solar_self_consumed),
               "Einspeisung" => Energy.sum(:solar_to_grid)
             },
