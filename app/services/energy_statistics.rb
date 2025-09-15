@@ -1,8 +1,27 @@
 class EnergyStatistics
+
+
+
+
+
+
   # Jahreswerte
   def self.by_year
+
+    prev_wiener_netze = {
+      2015 => 9868,
+      2016  => 9580,
+      2017  => 8531,
+      2018  => 8424,
+      2019  => 8167,
+      2020  => 8029,
+      2021  => 7260}
+
+    wiener_netze = prev_wiener_netze.merge(Energy.group(Arel.sql("EXTRACT(YEAR FROM day)")).sum(:real_wiener_netze).transform_keys(&:to_i))
+    wiener_netze[2022] = wiener_netze[2022] + 2400
+
     {
-      "Netzverbrauch" => Energy.group(Arel.sql("EXTRACT(YEAR FROM day)")).sum(:real_wiener_netze).transform_keys(&:to_i),
+      "Netzverbrauch" => wiener_netze,
       "Solar Eigenverbrauch" => Energy.group(Arel.sql("EXTRACT(YEAR FROM day)")).sum(:solar_self_consumed).transform_keys(&:to_i),
       "Solar Einspeisung" => Energy.group(Arel.sql("EXTRACT(YEAR FROM day)")).sum(:solar_to_grid).transform_keys(&:to_i)
     }

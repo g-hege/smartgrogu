@@ -26,8 +26,7 @@
       </div>
 
 
-
-      <div class="mb-8">
+      
       <!-- Monats-Chart für ausgewähltes Jahr -->
         <% selected_year = (request.query_parameters[:year] || Date.today.year).to_i %>
       </div>
@@ -50,7 +49,9 @@
 
       <!-- KPI-Cards by year-->
 
-      <h2 class="text-lg font-semibold mb-2">Jahr <%= selected_year %></h2>
+      <div class="mb-8 pl-4 md:pl-8">
+        <h2 class="text-lg font-semibold mb-2">Jahr <%= selected_year %></h2>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
 
         <div class="p-4 rounded-xl shadow bg-white">
@@ -85,7 +86,9 @@
         </div>
       </div>
 
-      <h2 class="text-lg font-semibold mb-2">Total</h2>
+      <div class="mb-8 pl-4 md:pl-8">
+        <h2 class="text-lg font-semibold mb-2">Total</h2>
+      </div>
 
       <!-- KPI-Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
