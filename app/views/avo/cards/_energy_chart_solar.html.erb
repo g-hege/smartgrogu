@@ -1,0 +1,10 @@
+<div style="width:100%; height: 300px;">
+  <%= pie_chart({
+      "Eigenverbrauch" => Energy.sum(:solar_self_consumed),
+      "Einspeisung" => Energy.sum(:solar_to_grid)
+    },
+    donut: true,
+    legend: "bottom",
+    library: { height: "300px" }) %>
+</div>
+

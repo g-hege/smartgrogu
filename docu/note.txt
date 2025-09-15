@@ -1,5 +1,7 @@
 EDITOR="nano" rails credentials:edit
 
+bundle exec rake assets:clean assets:precompile
+
 
 rails generate model MyModel --no-migration
 

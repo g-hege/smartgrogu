@@ -29,3 +29,10 @@ Rails.application.routes.draw do
   match '/422', to: 'errors#internal_server_error', via: :all
   match '/500', to: 'errors#internal_server_error', via: :all
 end
+
+if defined? ::Avo
+  Avo::Engine.routes.draw do
+    # This route is not protected, secure it with authentication if needed.
+    get "dashboard", to: "tools#dashboard", as: :dashboard
+  end
+end
