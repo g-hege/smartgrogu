@@ -174,8 +174,95 @@
               }
             }) %>
         </div>
-
       </div>
+
+      <div class="p-4  shadow bg-white mt-2 mb-2">
+        <h2 class="text-lg font-semibold mb-2">Totalabrechnung</h2>
+      </div>
+
+<% @invoicedata = EnergyStatistics.invoice_data %>
+<% @totaldata = EnergyStatistics.total_data(@invoicedata) %>
+<div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="py-3 px-6">Monat</th>
+        <th scope="col" class="py-3 px-6">Grid kWh</th>
+        <th scope="col" class="py-3 px-6">Stromkosten netto</th>
+        <th scope="col" class="py-3 px-6">Netzentgelte</th>
+        <th scope="col" class="py-3 px-6">Gebühren</th>
+        <th scope="col" class="py-3 px-6">Brutto</th>
+        <th scope="col" class="py-3 px-6">Brutto-Preis/kWh</th>
+        <th scope="col" class="py-3 px-6">Solar Self</th>
+        <th scope="col" class="py-3 px-6">Solar Self Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @invoicedata.each do |item| %>
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <%= item[:month] %>
+          </td>
+          <td class="py-4 px-6">
+            <%= '%.2f' % item[:grid_kwh] %> kWh
+          </td>
+          <td class="py-4 px-6">
+            <%= '%.2f' % item[:stromkosten_netto] %> €
+          </td>
+          <td class="py-4 px-6">
+            <%= '%.2f' % item[:netzentgelte] %> €
+          </td>
+          <td class="py-4 px-6">
+            <%= '%.2f' % item[:gebuehren] %> €
+          </td>
+          <td class="py-4 px-6 font-bold">
+            <%= '%.2f' % item[:brutto] %> €
+          </td>
+          <td class="py-4 px-6">
+            <%= '%.2f' % item[:brutto_price_kwh] %> €
+          </td>
+          <td class="py-4 px-6">
+            <%= '%.2f' % item[:solar_self] %> kWh
+          </td>
+          <td class="py-4 px-6 font-bold">
+            <%= '%.2f' % item[:solar_self_price] %> €
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+    <tfoot class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 font-bold">
+      <tr>
+        <td class="py-3 px-6">
+          Gesamt
+        </td>
+        <td class="py-3 px-6">
+          <%= '%.2f' % @totaldata[:grid_kwh] %> kWh
+        </td>
+        <td class="py-3 px-6">
+          <%= '%.2f' % @totaldata[:stromkosten_netto] %> €
+        </td>
+        <td class="py-3 px-6">
+          <%= '%.2f' % @totaldata[:netzentgelte] %> €
+        </td>
+        <td class="py-3 px-6">
+          <%= '%.2f' % @totaldata[:gebuehren] %> €
+        </td>
+        <td class="py-3 px-6">
+          <%= '%.2f' % @totaldata[:brutto] %> €
+        </td>
+        <td class="py-3 px-6">
+          </td>
+        <td class="py-3 px-6">
+          <%= '%.2f' % @totaldata[:solar_self] %> kWh
+        </td>
+        <td class="py-3 px-6">
+          <%= '%.2f' % @totaldata[:solar_self_price] %> €
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
 
 
 
