@@ -140,6 +140,32 @@ class EnergyStatistics
 
       stromverbrauch = 0
       netto_preis_kwh = netto / grid_kwh
+
+      if year == 2022
+        if month <= 6
+           netto_preis_kwh = 0.093619074
+           netto = grid_kwh * netto_preis_kwh
+        else
+           netto_preis_kwh = 0.19722386
+           netto = grid_kwh * netto_preis_kwh
+        end
+      end
+      if year == 2023
+        if month <= 7
+           netto_preis_kwh = 0.19722386
+           netto = grid_kwh * netto_preis_kwh
+        else
+           netto_preis_kwh = 0.156004216
+           netto = grid_kwh * netto_preis_kwh
+        end
+      end 
+
+      if year == 2024
+        if month <= 2
+           netto_preis_kwh = 0.156004216
+           netto = grid_kwh * netto_preis_kwh
+        end
+      end
       stromverbrauch += netto * ust
 
       service_fee = (0.0149 * grid_kwh) * ust
