@@ -9,8 +9,7 @@
     <% c.with_body do %>
 
 
-    <% @invoicedata = EnergyStatistics.invoice_data %>
-    <% @totaldata = EnergyStatistics.total_data(@invoicedata) %>
+
 
 
       <!-- Jahresauswahl -->
@@ -32,6 +31,10 @@
 
       <!-- Monats-Chart für ausgewähltes Jahr -->
       <% selected_year = (request.query_parameters[:year] || Date.today.year).to_i %>
+      <% @invoicedata = EnergyStatistics.invoice_data %>
+      <% @totaldata   = EnergyStatistics.total_data(@invoicedata) %>
+      <% @totalmonth  = EnergyStatistics.total_data_by_year(@invoicedata,selected_year) %>
+
 
       <div class="p-4 rounded-xl shadow bg-white mt-8 mb-4">
         <h2 class="text-lg font-semibold mb-2">Monatlicher Verbrauch <%= selected_year %></h2>
@@ -94,6 +97,23 @@
           <p class="text-sm text-gray-500">Ø Eigenverbrauchs-Rate</p>
           <p class="text-lg font-semibold"><%= EnergyStatistics.own_consumption_rate(selected_year) %> %</p>
         </div>
+
+
+        <div class="p-4 rounded-xl shadow bg-white">
+          <p class="text-sm text-gray-500">Kosten Brutto im Jahr <%= selected_year %></p>
+          <p class="text-lg font-semibold text-red-500">
+            <%= number_with_precision( @totalmonth[:brutto], precision: 2, delimiter: ".", separator: ",") %> €
+          </p>
+        </div>
+
+
+        <div class="p-4 rounded-xl shadow bg-white">
+          <p class="text-sm text-gray-500">Solar Ersparnis im Jahr <%= selected_year %></p>
+          <p class="text-lg font-semibold text-green-500">
+            <%= number_with_precision( @totalmonth[:solar_self_price], precision: 2, delimiter: ".", separator: ",") %> €
+          </p>
+        </div>
+
       </div>
 
       <div class="p-4  shadow bg-white mt-2 mb-2">
@@ -122,7 +142,6 @@
             <%= number_with_precision(Energy.sum(:solar_to_grid), precision: 2, delimiter: ".", separator: ",") %> kWh
           </p>
         </div>
-
 
         <div class="p-4 rounded-xl shadow bg-white">
           <p class="text-sm text-gray-500">Solar Ersparnis total</p>
@@ -174,23 +193,26 @@
 
         <div class="p-4 rounded-xl shadow bg-white">
           <h2 class="text-lg font-semibold mb-2">Solar-Anteil für das Jahr <%= selected_year %></h2>
-          <%= pie_chart({
-            "Grid - Wien Energie" => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:real_wiener_netze),
-            "Eigenverbrauch" => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:solar_self_consumed),
-            "Einspeisung" => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:solar_to_grid)
-          },
-          donut: true,
-          legend: "bottom",
-          library: {
-            plotOptions: {
-              pie: {
-                dataLabels: {
-                  enabled: true,
-                  format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          <%= pie_chart(
+            {
+              "Grid - Wien Energie" => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:real_wiener_netze),
+              "Eigenverbrauch"      => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:solar_self_consumed),
+              "Einspeisung"         => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:solar_to_grid)
+            },
+            donut: true,
+            legend: "bottom",
+            library: {
+              plotOptions: {
+                pie: {
+                  showInLegend: true
                 }
+              },
+              legend: {
+                labelFormatter: "function() { return this.name + ' (' + Highcharts.numberFormat(this.percentage, 1) + '%)'; }"
               }
             }
-          }) %>
+          ) %>
+
         </div>
       </div>
 

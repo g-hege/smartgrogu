@@ -247,5 +247,30 @@ class EnergyStatistics
       end
   end
 
+  def self.total_data_by_year(invoicedata, year)
+      totals = invoice_data.each_with_object({
+        grid_kwh: 0,
+        stromnetto: 0,
+        stromkosten: 0,
+        netzentgelte: 0,
+        gebuehren: 0,
+        brutto: 0,
+        solar_self: 0,
+        solar_self_price: 0
+      }) do |item, hash|
+        next if Date.strptime(item[:month], '%Y-%m').year != year
+        hash[:grid_kwh] += item[:grid_kwh]
+        hash[:stromnetto] += item[:stromnetto]
+        hash[:stromkosten] += item[:stromkosten]
+        hash[:netzentgelte] += item[:netzentgelte]
+        hash[:gebuehren] += item[:gebuehren]
+        hash[:brutto] += item[:brutto]
+        hash[:solar_self] += item[:solar_self]
+        hash[:solar_self_price] += item[:solar_self_price]
+      end
+  end
+
+
+
 
 end

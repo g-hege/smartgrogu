@@ -141,6 +141,7 @@ Avo.configure do |config|
      add_breadcrumb "Home", '/'
    end
 
+
   ## == Menus ==
   # config.main_menu = -> {
   #   section "Dashboards", icon: "avo/dashboards" do
