@@ -4,9 +4,11 @@ import "@hotwired/turbo-rails"
 import "trix"
 import "@rails/actiontext"
 
+import "chartkick"
+import Highcharts from "highcharts"
+window.Highcharts = Highcharts
 
-import "chartkick/chart.js"
-import Chartkick from "chartkick"
+
 
 // Controllers
 import AppCtrl      from './controllers/app'

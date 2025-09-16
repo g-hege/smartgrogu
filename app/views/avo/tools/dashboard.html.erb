@@ -131,8 +131,6 @@
           </p>
         </div>
 
-
-
       </div>
 
       <!-- Jahres-Chart -->
@@ -152,14 +150,13 @@
       </div>
 
 
-      <!-- Weitere Charts Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+      <div class="grid grid-cols-2 md:grid-cols-2 gap-6 mt-8">
         <div class="p-4 rounded-xl shadow bg-white">
           <h2 class="text-lg font-semibold mb-2">Solar-Anteil seit 1-Aug 2023</h2>
           <%= pie_chart({
               "Grid - Wien Energie" => Energy.where("day > ?", "2023-08-01").sum(:real_wiener_netze),
-              "Eigenverbrauch" => Energy.sum(:solar_self_consumed),
-              "Einspeisung" => Energy.sum(:solar_to_grid)
+              "Eigenverbrauch" => Energy.where("day > ?", "2023-08-01").sum(:solar_self_consumed),
+              "Einspeisung" => Energy.where("day > ?", "2023-08-01").sum(:solar_to_grid)
             },
             donut: true,
             legend: "bottom",
@@ -168,19 +165,37 @@
                 pie: {
                   dataLabels: {
                     enabled: true,
-                    formatter: <<-JS
-                      function() {
-                        var total = this.series.data.reduce(function(sum, point) { return sum + point.y; }, 0);
-                        var percentage = ((this.y / total) * 100).toFixed(1);
-                        return this.point.name + ': ' + percentage + '%';
-                      }
-                    JS
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                   }
                 }
               }
             }) %>
         </div>
+
+        <div class="p-4 rounded-xl shadow bg-white">
+          <h2 class="text-lg font-semibold mb-2">Solar-Anteil für das Jahr <%= selected_year %></h2>
+          <%= pie_chart({
+            "Grid - Wien Energie" => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:real_wiener_netze),
+            "Eigenverbrauch" => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:solar_self_consumed),
+            "Einspeisung" => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:solar_to_grid)
+          },
+          donut: true,
+          legend: "bottom",
+          library: {
+            plotOptions: {
+              pie: {
+                dataLabels: {
+                  enabled: true,
+                  format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+              }
+            }
+          }) %>
+        </div>
       </div>
+
+
+<!----------------------------- Tabelle Totel Abbrechnung-->
 
       <div class="p-4  shadow bg-white mt-2 mb-2">
         <h2 class="text-lg font-semibold mb-2">Total invoice Summary</h2>
