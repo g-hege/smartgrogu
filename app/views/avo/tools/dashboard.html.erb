@@ -39,7 +39,7 @@
       <div class="p-4 rounded-xl shadow bg-white mt-8 mb-4">
         <h2 class="text-lg font-semibold mb-2">Monatlicher Verbrauch <%= selected_year %></h2>
         <%= column_chart EnergyStatistics.by_month(selected_year).map { |name, data| { name: name, data: data } },
-          xtitle: "Monat",
+          xtitle: selected_year.to_s,
           ytitle: "kWh",
           library: {
             height: 350,
