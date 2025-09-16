@@ -154,27 +154,62 @@ class EnergyStatistics
       gebrauchsabgabe_energie = (netto * 0.06) * ust
       stromverbrauch += gebrauchsabgabe_energie
 #--
+
+      if year == 2024
+        strompreisbremse = 0
+        case month
+        when 3
+          strompreisbremse = 0 
+        when 4
+          strompreisbremse = 0 
+        when 5
+          strompreisbremse = 0          
+        when 6
+          strompreisbremse = 0
+        when 7
+          strompreisbremse = 0
+        when 8 
+          strompreisbremse = -2.14
+        when 9
+          strompreisbremse = -0.95
+        when 10
+          strompreisbremse = -4.31
+        when 11
+          strompreisbremse = -14.75
+        when 12
+          strompreisbremse = -15.69
+        end
+        stromverbrauch += strompreisbremse
+      end
+
       netzentgelte = 0
-      netznutzung_ne_7_pauschale_leistung_einfachtarif = (0.074 * grid_kwh) * ust
+      if year < 2025
+        netznutzung_ne_7_pauschale_leistung_einfachtarif = (0.053 * grid_kwh) * ust
+        netzleistung_ne_7_pauschale_leistung = ((36.0/days_in_year) * days_in_month) * ust
+        netzverlustentgelt_ne_7 = (0.0087 * grid_kwh) * ust
+      else
+        netznutzung_ne_7_pauschale_leistung_einfachtarif = (0.074 * grid_kwh) * ust
+        netzleistung_ne_7_pauschale_leistung = ((48.0/days_in_year) * days_in_month) * ust
+        netzverlustentgelt_ne_7 = (0.007 * grid_kwh) * ust
+      end
+
       netzentgelte += netznutzung_ne_7_pauschale_leistung_einfachtarif
-
-      netzleistung_ne_7_pauschale_leistung = ((48.0/days_in_year) * days_in_month) * ust
       netzentgelte += netzleistung_ne_7_pauschale_leistung
-
-      netzverlustentgelt_ne_7 = (0.007 * grid_kwh) * ust
       netzentgelte += netzverlustentgelt_ne_7
 
-      eag_pauschale_ne_7 = ((19.02/days_in_year)*days_in_month) * ust
-      netzentgelte += eag_pauschale_ne_7
+      if year >= 2025
+        eag_pauschale_ne_7 = ((19.02/days_in_year)*days_in_month) * ust
+        netzentgelte += eag_pauschale_ne_7
 
-      eag_foerderbeitrag_nicht_gemessene_leistung_ne_7 = ((4.695/days_in_year) * days_in_month) * ust 
-      netzentgelte += eag_foerderbeitrag_nicht_gemessene_leistung_ne_7
+        eag_foerderbeitrag_nicht_gemessene_leistung_ne_7 = ((4.695/days_in_year) * days_in_month) * ust 
+        netzentgelte += eag_foerderbeitrag_nicht_gemessene_leistung_ne_7
 
-      eag_foerderbeitrag_netznutzung_ne_7_nicht_gemessene = (0.0074 * grid_kwh) * ust
-      netzentgelte += eag_foerderbeitrag_netznutzung_ne_7_nicht_gemessene
+        eag_foerderbeitrag_netznutzung_ne_7_nicht_gemessene = (0.0074 * grid_kwh) * ust
+        netzentgelte += eag_foerderbeitrag_netznutzung_ne_7_nicht_gemessene
 
-      eag_foerderbeitrag_netzverlust_ne_7 = (0.0006 * grid_kwh) * ust
-      netzentgelte += eag_foerderbeitrag_netzverlust_ne_7
+        eag_foerderbeitrag_netzverlust_ne_7 = (0.0006 * grid_kwh) * ust
+        netzentgelte += eag_foerderbeitrag_netzverlust_ne_7
+      end
 
       messpreis_ebenenbezogen_ne_7 = ((26.16/days_in_year ) * days_in_month) * ust 
       netzentgelte += messpreis_ebenenbezogen_ne_7
@@ -182,7 +217,11 @@ class EnergyStatistics
       gebrauchsabgabe_nur_netz_ebenenbezogen_ne_7 = 2.24
       netzentgelte += gebrauchsabgabe_nur_netz_ebenenbezogen_ne_7
 
-      elektrizitätsabgabe_ohne_ebene = (0.015 * grid_kwh) * ust
+      if year >= 2025
+        elektrizitätsabgabe_ohne_ebene = (0.015 * grid_kwh) * ust
+      else
+        elektrizitätsabgabe_ohne_ebene = (0.001 * grid_kwh) * ust        
+      end
       gebuehren = elektrizitätsabgabe_ohne_ebene
 
       brutto = stromverbrauch + netzentgelte + gebuehren
