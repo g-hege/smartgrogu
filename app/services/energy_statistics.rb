@@ -83,17 +83,17 @@ class EnergyStatistics
     grid = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                  .group(Arel.sql("EXTRACT(MONTH FROM day)"))
                  .sum(:real_wiener_netze)
-                 .transform_keys(&:to_i)
+                 .transform_keys { |month_number| Date::ABBR_MONTHNAMES[month_number] }
 
     solar_self = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                        .group(Arel.sql("EXTRACT(MONTH FROM day)"))
                        .sum(:solar_self_consumed)
-                       .transform_keys(&:to_i)
+                       .transform_keys { |month_number| Date::ABBR_MONTHNAMES[month_number] }
 
     solar_to_grid = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                           .group(Arel.sql("EXTRACT(MONTH FROM day)"))
                           .sum(:solar_to_grid)
-                          .transform_keys(&:to_i)
+                          .transform_keys { |month_number| Date::ABBR_MONTHNAMES[month_number] }
 
     {
       "Grid - Wien Energie" => grid,
