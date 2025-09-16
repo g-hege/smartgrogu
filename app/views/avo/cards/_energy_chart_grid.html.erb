@@ -1,6 +1,0 @@
-<div style="width:100%; height: 300px;">
-  <%= line_chart Energy.group(:day).sum(:grid_consumed),
-    xtitle: "Tag",
-    ytitle: "Netzverbrauch (kWh)",
-    library: { height: "300px" } %>
-</div>

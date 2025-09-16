@@ -157,7 +157,7 @@
         <div class="p-4 rounded-xl shadow bg-white">
           <h2 class="text-lg font-semibold mb-2">Solar-Anteil seit 1-Aug 2023</h2>
           <%= pie_chart({
-              "Wien Strom" => Energy.where("day > ?", "2023-08-01").sum(:real_wiener_netze),
+              "Grid - Wien Energie" => Energy.where("day > ?", "2023-08-01").sum(:real_wiener_netze),
               "Eigenverbrauch" => Energy.sum(:solar_self_consumed),
               "Einspeisung" => Energy.sum(:solar_to_grid)
             },
@@ -193,7 +193,7 @@
       <tr>
         <th scope="col" class="py-3 px-6">Monat</th>
         <th scope="col" class="py-3 px-6">Grid kWh</th>
-        <th scope="col" class="py-3 px-6">Stromkosten netto</th>
+        <th scope="col" class="py-3 px-6">Stromkosten</th>
         <th scope="col" class="py-3 px-6">Netzentgelte</th>
         <th scope="col" class="py-3 px-6">Gebühren</th>
         <th scope="col" class="py-3 px-6">Brutto</th>
@@ -212,7 +212,7 @@
             <%= '%.2f' % item[:grid_kwh] %> kWh
           </td>
           <td class="py-4 px-6">
-            <%= '%.2f' % item[:stromkosten_netto] %> €
+            <%= '%.2f' % item[:stromkosten] %> €
           </td>
           <td class="py-4 px-6">
             <%= '%.2f' % item[:netzentgelte] %> €
@@ -245,7 +245,7 @@
           <%= '%.2f' % @totaldata[:grid_kwh] %> kWh
         </td>
         <td class="py-3 px-6">
-          <%= '%.2f' % @totaldata[:stromkosten_netto] %> €
+          <%= '%.2f' % @totaldata[:stromkosten] %> €
         </td>
         <td class="py-3 px-6">
           <%= '%.2f' % @totaldata[:netzentgelte] %> €

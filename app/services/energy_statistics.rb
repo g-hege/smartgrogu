@@ -16,7 +16,7 @@ class EnergyStatistics
     wiener_netze[2022] = wiener_netze[2022] + 2400
 
     {
-      "Netzverbrauch" => wiener_netze,
+      "Grid - Wien Energie" => wiener_netze,
       "Solar Eigenverbrauch" => Energy.group(Arel.sql("EXTRACT(YEAR FROM day)")).sum(:solar_self_consumed).transform_keys(&:to_i),
       "Solar Einspeisung" => Energy.group(Arel.sql("EXTRACT(YEAR FROM day)")).sum(:solar_to_grid).transform_keys(&:to_i)
     }
@@ -96,7 +96,7 @@ class EnergyStatistics
                           .transform_keys(&:to_i)
 
     {
-      "Netzverbrauch" => grid,
+      "Grid - Wien Energie" => grid,
       "Solar Eigenverbrauch" => solar_self,
       "Solar Einspeisung" => solar_to_grid
     }
@@ -106,7 +106,7 @@ class EnergyStatistics
   def self.energy_timeline
     [
       {
-        name: "Wien Strom",
+        name: "Wien Energie",
         data: EnergyMonthlyView.order(:month)
                .pluck(:month, :real_wiener_netze)
                .to_h
@@ -189,7 +189,8 @@ class EnergyStatistics
 
       return {month: "#{year}-#{month}",
               grid_kwh: grid_kwh,
-              stromkosten_netto: stromverbrauch,
+              stromnetto: netto,
+              stromkosten: stromverbrauch,
               netzentgelte: netzentgelte,
               gebuehren: gebuehren,
               brutto: brutto,
@@ -203,7 +204,7 @@ class EnergyStatistics
   def self.invoice_data
       total = []
       (2022..Date.current.year).each do |year|
-          ((year==2022 ? 06 : 01) .. Date.current.month).each do |month|
+          ((year == 2022 ? 06 : 01) .. (year == Date.current.year ? Date.current.month : 12 )).each do |month|
 
           grid_kwh = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                  .where(Arel.sql("EXTRACT(MONTH FROM day) = #{month}"))
@@ -212,11 +213,13 @@ class EnergyStatistics
           netto = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                  .where(Arel.sql("EXTRACT(MONTH FROM day) = #{month}"))
                  .sum(:grid_price_netto)
+
           solar_self_consumed = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                  .where(Arel.sql("EXTRACT(MONTH FROM day) = #{month}"))
                  .sum(:solar_self_consumed)
 
             total << price_calc(grid_kwh: grid_kwh , netto: netto, month: month, year: year, solar_self_consumed: solar_self_consumed)
+
           end
       end
       total
@@ -225,7 +228,8 @@ class EnergyStatistics
   def self.total_data(invoicedata)
       totals = invoice_data.each_with_object({
         grid_kwh: 0,
-        stromkosten_netto: 0,
+        stromnetto: 0,
+        stromkosten: 0,
         netzentgelte: 0,
         gebuehren: 0,
         brutto: 0,
@@ -233,7 +237,8 @@ class EnergyStatistics
         solar_self_price: 0
       }) do |item, hash|
         hash[:grid_kwh] += item[:grid_kwh]
-        hash[:stromkosten_netto] += item[:stromkosten_netto]
+        hash[:stromnetto] += item[:stromnetto]
+        hash[:stromkosten] += item[:stromkosten]
         hash[:netzentgelte] += item[:netzentgelte]
         hash[:gebuehren] += item[:gebuehren]
         hash[:brutto] += item[:brutto]
