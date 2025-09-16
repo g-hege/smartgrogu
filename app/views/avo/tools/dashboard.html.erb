@@ -192,7 +192,7 @@
         </div>
 
         <div class="p-4 rounded-xl shadow bg-white">
-          <h2 class="text-lg font-semibold mb-2">Solar-Anteil für das Jahr <%= selected_year %></h2>
+          <h2 class="text-lg font-semibold mb-2">Solar-Anteil <%= selected_year %></h2>
           <%= pie_chart(
             {
               "Grid - Wien Energie" => Energy.where("EXTRACT(YEAR FROM day) = ?", selected_year).sum(:real_wiener_netze),
