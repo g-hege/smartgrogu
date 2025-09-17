@@ -6,12 +6,21 @@
 
     <% c.with_body do %>
 
-     <% @data = EnergyStatistics.consumption_by_day('solar',40) %>
+     <% @data = EnergyStatistics.consumption_by_day('solar',50) %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
-        <h2 class="text-lg font-semibold mb-2">Solar by day</h2>
+        <h2 class="text-lg font-semibold mb-2">Solar by day kWh</h2>
         <%= column_chart(@data, width: "100%") %>
       </div>
+
+     <% @data = EnergyStatistics.consumption_by_week('solar',33) %>
+      <!-- Energy Timeline Fullwidth -->
+      <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
+        <h2 class="text-lg font-semibold mb-2">Solar by week kWh</h2>
+        <%= column_chart(@data, width: "100%") %>
+      </div>
+
+
 
       <% @data = EnergyStatistics.consumption_by_month('pool') %>
       <!-- Energy Timeline Fullwidth -->
