@@ -335,7 +335,10 @@ class EnergyStatistics
       end
   end
 
-
+  def self.consumption_by_month(device)
+    results = Consumption.where(device: device).group_by_month(:timestamp, last: 24, current: true).sum('value')
+    ret = results.each_with_object({}) { |(date, value), hash| hash[date.strftime('%b %Y')] = (value/1000).round(2)} 
+  end
 
 
 end

@@ -15,8 +15,9 @@ module SmartGrogu
     config.exceptions_app = self.routes
 
     config.time_zone = "Vienna"
+    config.active_record.default_timezone = :utc
 
-    config.active_record.default_timezone = :local
+#    config.active_record.default_timezone = :local
     
     config.active_job.queue_adapter = :good_job
 

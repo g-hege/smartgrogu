@@ -36,3 +36,10 @@ if defined? ::Avo
     get "dashboard", to: "tools#dashboard", as: :dashboard
   end
 end
+
+if defined? ::Avo
+  Avo::Engine.routes.draw do
+    # This route is not protected, secure it with authentication if needed.
+    get "temperature_dashboard", to: "tools#temperature_dashboard", as: :temperature_dashboard
+  end
+end
