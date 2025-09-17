@@ -340,5 +340,14 @@ class EnergyStatistics
     ret = results.each_with_object({}) { |(date, value), hash| hash[date.strftime('%b %Y')] = (value/1000).round(2)} 
   end
 
+  def self.consumption_by_day(device, days)
+    results = Consumption.where(device: device).group_by_day(:timestamp, last: days, current: true).sum('value')
+    ret = results.each_with_object({}) { |(date, value), hash| hash[date.strftime('%b %d')] = (value/1000).round(2)} 
+  end
+
+  def self.recording_by_month(device)
+    results = Recording.where(device: device).group_by_month(:timestamp, last: 24, current: true).average('value')
+    ret = results.each_with_object({}) { |(date, value), hash| hash[date.strftime('%b %Y')] = value} 
+  end
 
 end

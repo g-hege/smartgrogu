@@ -6,54 +6,69 @@
 
     <% c.with_body do %>
 
-      <% @pool_energy = EnergyStatistics.consumption_by_month('pool') %>
+     <% @data = EnergyStatistics.consumption_by_day('solar',40) %>
+      <!-- Energy Timeline Fullwidth -->
+      <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
+        <h2 class="text-lg font-semibold mb-2">Solar by day</h2>
+        <%= column_chart(@data, width: "100%") %>
+      </div>
+
+      <% @data = EnergyStatistics.consumption_by_month('pool') %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
         <h2 class="text-lg font-semibold mb-2">Pool Consumption</h2>
-        <%= line_chart(@pool_energy, width: "100%") %>
+        <%= line_chart(@data, width: "100%") %>
       </div>
     
-      <% @pool_energy = EnergyStatistics.consumption_by_month('boiler') %>
+      <% @data = EnergyStatistics.consumption_by_month('boiler') %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
         <h2 class="text-lg font-semibold mb-2">Boiler Consumption</h2>
-        <%= line_chart(@pool_energy, width: "100%") %>
+        <%= line_chart(@data, width: "100%") %>
       </div>
 
-      <% @pool_energy = EnergyStatistics.consumption_by_month('dryer') %>
+      <% @data = EnergyStatistics.consumption_by_month('dryer') %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
         <h2 class="text-lg font-semibold mb-2">Trockner Consumption</h2>
-        <%= line_chart(@pool_energy, width: "100%") %>
+        <%= line_chart(@data, width: "100%") %>
       </div>
 
-      <% @pool_energy = EnergyStatistics.consumption_by_month('waschmaschine') %>
+      <% @data = EnergyStatistics.consumption_by_month('waschmaschine') %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
         <h2 class="text-lg font-semibold mb-2">Waschmaschine Consumption</h2>
-        <%= line_chart(@pool_energy, width: "100%") %>
+        <%= line_chart(@data, width: "100%") %>
       </div>
 
-      <% @pool_energy = EnergyStatistics.consumption_by_month('tv') %>
+      <% @data = EnergyStatistics.consumption_by_month('tv') %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
         <h2 class="text-lg font-semibold mb-2">TV Consumption</h2>
-        <%= line_chart(@pool_energy, width: "100%") %>
+        <%= line_chart(@data, width: "100%") %>
       </div>
 
-      <% @pool_energy = EnergyStatistics.consumption_by_month('workplace') %>
+      <% @data = EnergyStatistics.consumption_by_month('workplace') %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
         <h2 class="text-lg font-semibold mb-2">Workplace Consumption</h2>
-        <%= line_chart(@pool_energy, width: "100%") %>
+        <%= line_chart(@data, width: "100%") %>
       </div>
 
-      <% @pool_energy = EnergyStatistics.consumption_by_month('fridge2') %>
+      <% @data = EnergyStatistics.consumption_by_month('fridge2') %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
         <h2 class="text-lg font-semibold mb-2">Logia Kühlschrank Consumption</h2>
-        <%= line_chart(@pool_energy, width: "100%") %>
+        <%= line_chart(@data, width: "100%") %>
       </div>
+
+     <% @data = EnergyStatistics.recording_by_month('temp-garden') %>
+      <!-- Energy Timeline Fullwidth -->
+      <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
+        <h2 class="text-lg font-semibold mb-2">Temp Garden</h2>
+        <%= line_chart(@data, width: "100%") %>
+      </div>
+
 
 
 
