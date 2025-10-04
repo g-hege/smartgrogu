@@ -25,7 +25,7 @@ class EnergyStatistics
   def self.autarkie_rate_by_year(year)
     # Gesamter Stromverbrauch aus dem Netz
       if year.nil?
-        stromverbrauch = Energy.sum(:real_wiener_netze)
+        stromverbrauch = Energy.sum("COALESCE(real_wiener_netze, grid_consumed)")
 
         # Eigenverbrauchter Solarstrom
         solar_erzeugt = Energy.sum(:solar_self_consumed)
@@ -82,7 +82,7 @@ class EnergyStatistics
   def self.by_month(year)
     grid = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                  .group(Arel.sql("EXTRACT(MONTH FROM day)"))
-                 .sum(:real_wiener_netze)
+                 .sum("COALESCE(real_wiener_netze, grid_consumed)")
                  .transform_keys { |month_number| Date::ABBR_MONTHNAMES[month_number] }
 
     solar_self = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
