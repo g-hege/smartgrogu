@@ -273,7 +273,7 @@ class EnergyStatistics
 
           grid_kwh = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                  .where(Arel.sql("EXTRACT(MONTH FROM day) = #{month}"))
-                 .sum(:real_wiener_netze)
+                 .sum("COALESCE(real_wiener_netze, grid_consumed)")
 
           netto = Energy.where(Arel.sql("EXTRACT(YEAR FROM day) = #{year}"))
                  .where(Arel.sql("EXTRACT(MONTH FROM day) = #{month}"))
