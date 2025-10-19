@@ -10,18 +10,21 @@ class EpexImporter
   end
 
   def call
-    date_from = Epex.maximum(:timestamp).to_date.prev_day # rescue Date.parse(Hegesmart.config.wstw.startdate)
-    date_to = date_from.next_month
-    uri = URI.parse("https://api.awattar.at/v1/marketdata?start=#{date_from.to_time.to_i}000&end=#{date_to.to_time.to_i}000")
+
+    # excl service fee: https://i.spottyenergie.at/api/prices/MARKET/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at
+    # inkl service fee: https://i.spottyenergie.at/api/prices/CONSUMPTION/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at
+
+    uri = URI.parse("https://i.spottyenergie.at/api/prices/MARKET/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at")
+    uri = URI.parse("https://i.spottyenergie.at/api/prices/CONSUMPTION/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at")
+
     response = Net::HTTP.get_response(uri)
-    puts "datefrom: #{date_from} to #{date_to}"
+    data = JSON response.body
 
     if response.code.to_i == 200
       data = JSON response.body
-      puts "#{data['data'].count} Records imported from awattar"
-
-      Epex.where('timestamp >= ?', date_from).delete_all
-      insertrecs = data['data'].map { |h| { timestamp: Time.at(h['start_timestamp'].to_s[0..-4].to_i).to_datetime.utc, marketprice:  h['marketprice']}}
+      puts "#{data.count} epex price items imported from spotty"
+      Epex.where('timestamp >= ?', data.first['from']).delete_all
+      insertrecs = data.map { |h| { timestamp: DateTime.strptime(h['from'].to_s.sub(/(\+|-)\d{2}:\d{2}/, ''), '%Y-%m-%dT%H:%M:%S') , marketprice:  h['price']}}
       Epex.insert_all(insertrecs)
     end
     
@@ -37,7 +40,7 @@ class EpexImporter
                         .order(timestamp: :desc)
                         .limit(1)
                         .pluck(:marketprice)
-                        .first.to_f / 10.0 #   cent/kWh
+                        .first.to_f #   cent/kWh
 
         Shelly.set_kvs('poolcontrol','CurrentMarketPrice',current_price.round(1))
 

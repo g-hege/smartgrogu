@@ -134,13 +134,13 @@ class ShellyCloud
     data = {
       price: (
         Epex
-          .where('timestamp < ?', DateTime.now.utc) ## timezone fix
+          .where('timestamp < ?', DateTime.now) ## timezone fix
           .order(timestamp: :desc)             
           .first                               
           &.marketprice                        
       ).then do |marketprice|
         if marketprice.present?
-           '%.8f' % ((marketprice.to_f / 10) / 100)
+           '%.8f' % (marketprice.to_f ) 
         else
           nil 
         end
