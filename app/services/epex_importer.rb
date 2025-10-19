@@ -5,6 +5,11 @@ class EpexImporter
     new().call
   end
 
+  def self.send_current_epex()
+    new().send_current_epex
+  end
+  
+
   def initialize()
 
   end
