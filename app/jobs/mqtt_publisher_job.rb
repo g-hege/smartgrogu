@@ -32,11 +32,11 @@ class MqttPublisherJob < ApplicationJob
                         .order(timestamp: :desc)
                         .limit(1)
                         .pluck(:marketprice)
-                        .first.to_f / 10.0 #   cent/kWh
+                        .first.to_f  #   cent/kWh
 
     # `Date.today.all_day` ist die idiomatische Rails-Methode für Datumsgleichheit
     price_running_hours = Epex.where(timestamp: Date.today.all_day)
-                              .where('marketprice < ?', max_market_price * 10)
+                              .where('marketprice < ?', max_market_price )
                               .count
 
     # Ermittelt Min-, Max- und Durchschnittspreise für den heutigen Tag
@@ -46,9 +46,9 @@ class MqttPublisherJob < ApplicationJob
     WHERE DATE(timestamp) = CURRENT_DATE
     ").first
 
-    max_price = (min_max_avg.try(:max).to_f / 10.0).to_f rescue 'na'
-    min_price = (min_max_avg.try(:min).to_f / 10.0).to_f rescue 'na'
-    avg_price = (min_max_avg.try(:avg).to_f / 10.0).to_f rescue 'na'
+    max_price = (min_max_avg.try(:max).to_f ).to_f rescue 'na'
+    min_price = (min_max_avg.try(:min).to_f ).to_f rescue 'na'
+    avg_price = (min_max_avg.try(:avg).to_f ).to_f rescue 'na'
 
     solar_week_data = {}
     Solarweek.all.each {|w| solar_week_data["d#{(1 + solar_week_data.count )}".to_sym] = w.solarenergie.to_f/1000}
