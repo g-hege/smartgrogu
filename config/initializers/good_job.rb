@@ -21,7 +21,7 @@ Rails.application.configure do
 	      description: 'start mqtt listener job'
 	    },	  	
 	    epex_import: {
-	      cron: '1 * * * *', # 1 Minute nach Punkt
+	      cron: '0,15,30,45 * * * *', # jeweils alle 15 Minuten
 	      class: 'EpexImportJob',
 	      description: 'import new epex spot (European Power Exchange) prices'
 	    },

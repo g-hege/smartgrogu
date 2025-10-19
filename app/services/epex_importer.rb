@@ -11,11 +11,8 @@ class EpexImporter
 
   def call
 
-    # excl service fee: https://i.spottyenergie.at/api/prices/MARKET/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at
-    # inkl service fee: https://i.spottyenergie.at/api/prices/CONSUMPTION/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at
-
     uri = URI.parse("https://i.spottyenergie.at/api/prices/MARKET/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at")
-    uri = URI.parse("https://i.spottyenergie.at/api/prices/CONSUMPTION/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at")
+#    uri = URI.parse("https://i.spottyenergie.at/api/prices/CONSUMPTION/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at")
 
     response = Net::HTTP.get_response(uri)
     data = JSON response.body
@@ -24,12 +21,10 @@ class EpexImporter
       data = JSON response.body
       puts "#{data.count} epex price items imported from spotty"
       Epex.where('timestamp >= ?', data.first['from']).delete_all
-      insertrecs = data.map { |h| { timestamp: DateTime.strptime(h['from'].to_s.sub(/(\+|-)\d{2}:\d{2}/, ''), '%Y-%m-%dT%H:%M:%S') , marketprice:  h['price']}}
+      insertrecs = data.map { |h| { timestamp: DateTime.strptime(h['from']) , marketprice:  h['price']}}
       Epex.insert_all(insertrecs)
     end
     
-    send_current_epex
-
   end
 
   def send_current_epex
