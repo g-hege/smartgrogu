@@ -4,7 +4,6 @@ class ShellyImportJob < ApplicationJob
 
   def perform
   	ShellyCloud.import
-    ShellyCloud.update_market_price
   	Rails.logger.info "Shelly import done"
     GoodJob::Job.where(queue_name: 'shelly_importer').where.not(finished_at: nil).delete_all
     GoodJob::Execution.where(queue_name: 'shelly_importer').where.not(finished_at: nil).delete_all
