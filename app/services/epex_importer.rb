@@ -20,13 +20,13 @@ class EpexImporter
 #    uri = URI.parse("https://i.spottyenergie.at/api/prices/CONSUMPTION/4aae2e61-00df-462e-9f48-a9a96fafa45d?timezone=at")
 
     response = Net::HTTP.get_response(uri)
-    data = JSON response.body
-
+ 
     if response.code.to_i == 200
+ 
       data = JSON response.body
       puts "#{data.count} epex price items imported from spotty"
       Epex.where('timestamp >= ?', data.first['from']).delete_all
-      insertrecs = data.map { |h| { timestamp: DateTime.strptime(h['from']) , marketprice:  h['price']}}
+      insertrecs = data.map { |h| { timestamp: DateTime.strptime(h['from']) , marketprice:  h['price'], netto: h['price'] + 1.894}}
       Epex.insert_all(insertrecs)
     end
     

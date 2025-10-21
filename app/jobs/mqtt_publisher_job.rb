@@ -34,6 +34,13 @@ class MqttPublisherJob < ApplicationJob
                         .pluck(:marketprice)
                         .first.to_f  #   cent/kWh
 
+    current_price_netto = Epex.where('timestamp < ?', Time.now)
+                        .order(timestamp: :desc)
+                        .limit(1)
+                        .pluck(:netto)
+                        .first.to_f  #   cent/kWh
+
+
     # `Date.today.all_day` ist die idiomatische Rails-Methode für Datumsgleichheit
     price_running_hours = Epex.where(timestamp: Date.today.all_day)
                               .where('marketprice < ?', max_market_price )
@@ -137,7 +144,8 @@ class MqttPublisherJob < ApplicationJob
                           limit_runtime: "#{limit_pump_runtime}"
                           }.to_json )
 
-          client.publish("#{mqtt_prefix}c4/marketprice", {  price: current_price.round(2), 
+          client.publish("#{mqtt_prefix}c4/marketprice", {  price: current_price.round(2),
+                                       netto:  current_price_netto.round(2),
                                        max_price: max_price.round(2), 
                                        min_price: min_price.round(2),
                                        avg_price: avg_price.round(2),
