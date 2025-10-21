@@ -101,15 +101,27 @@ class MqttPublisherJob < ApplicationJob
     end
 
     begin
-      shellydata = ShellyCloud.devicestatus(['ht_wz','ht_sz'],['temperature:0','humidity:0'])
+      shellydata = ShellyCloud.devicestatus(['ht_wz','ht_sz','ht_garden','ht_loggia','ht_bad'],['temperature:0','humidity:0'])
       if !shellydata['ht_wz'].nil?
         hm_data['temp-wz2'] = shellydata['ht_wz']['temperature:0']['tC']
         hm_data['humidity-wz2'] = shellydata['ht_wz']['humidity:0']['rh']      
       end
       if !shellydata['ht_sz'].nil?
         hm_data['temp-sz'] = shellydata['ht_sz']['temperature:0']['tC']
-        hm_data['humidity-sz'] = shellydata['ht_wz']['humidity:0']['rh']      
+        hm_data['humidity-sz'] = shellydata['ht_sz']['humidity:0']['rh']      
       end
+      if !shellydata['ht_garden'].nil?
+        hm_data['temp-garden'] = shellydata['ht_garden']['temperature:0']['tC']
+        hm_data['humidity-garden'] = shellydata['ht_garden']['humidity:0']['rh']      
+      end
+      if !shellydata['ht_loggia'].nil?
+        hm_data['temp-loggia'] = shellydata['ht_loggia']['temperature:0']['tC']
+        hm_data['humidity-loggia'] = shellydata['ht_loggia']['humidity:0']['rh']      
+      end
+      if !shellydata['ht_bad'].nil?
+        hm_data['temp-bad'] = shellydata['ht_bad']['temperature:0']['tC']
+        hm_data['humidity-bad'] = shellydata['ht_bad']['humidity:0']['rh']      
+      end                  
     rescue
     end
 
