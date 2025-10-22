@@ -26,7 +26,7 @@ class EpexImporter
       data = JSON response.body
       puts "#{data.count} epex price items imported from spotty"
       Epex.where('timestamp >= ?', data.first['from']).delete_all
-      insertrecs = data.map { |h| { timestamp: DateTime.strptime(h['from']) , marketprice:  h['price'], netto: h['price'] + 1.894}}
+      insertrecs = data.map { |h| { timestamp: DateTime.strptime(h['from']) , marketprice:  h['price'], netto: (h['price'] + 1.894) * 1.2}}
       Epex.insert_all(insertrecs)
     end
     
