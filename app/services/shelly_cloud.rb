@@ -124,6 +124,9 @@ class ShellyCloud
     total_day
   end
   
+#  netto: (h['price'] + 1.894) * 1.2}}
+
+
   def update_market_price
 
     uri = URI("#{@shelly_uri}/v2/user/pp-ltu/#{Rails.application.credentials.shelly.live_tarif_token}")
@@ -140,7 +143,7 @@ class ShellyCloud
           &.marketprice                        
       ).then do |marketprice|
         if marketprice.present?
-           '%.8f' % (marketprice.to_f ) 
+           '%.8f' % (((marketprice.to_f + 1.894) * 1.2) / 100)
         else
           nil 
         end
