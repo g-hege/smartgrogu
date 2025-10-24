@@ -143,7 +143,7 @@ class ShellyCloud
           &.marketprice                        
       ).then do |marketprice|
         if marketprice.present?
-           '%.8f' % (((marketprice.to_f + 1.894) * 1.2) / 100)
+           '%.3f' % (((marketprice.to_f + 1.894) * 1.2) / 100)
         else
           nil 
         end
