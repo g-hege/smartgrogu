@@ -15,7 +15,7 @@ class ShellyCloud
   end
 
   def initialize()
-    uri = URI.parse('https://api.shelly.cloud/auth/login')
+    uri = URI.parse('https://api2.shelly.cloud/auth/login')
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = uri.scheme == 'https'
     req =  Net::HTTP::Post.new(uri.request_uri)
@@ -177,10 +177,12 @@ class ShellyCloud
 
   def devicestatus(devices, status_pick)
 
+
+#      @shelly_uri = 'https://shelly-77-eu.shelly.cloud'
+
       ids = devices.map {|device|
           Rails.application.credentials.shelly.device[device][:id] rescue nil
       }
-
       uri = URI("#{@shelly_uri}/v2/devices/api/get?auth_key=#{Rails.application.credentials.shelly.auth_key}")
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
