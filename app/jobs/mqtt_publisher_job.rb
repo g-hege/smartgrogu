@@ -5,6 +5,14 @@ class MqttPublisherJob < ApplicationJob
 
   queue_as :mqtt_publisher # Definiert eine dedizierte Warteschlange für diesen Job
 
+  def homematic_recording
+    %w{temp-garden humidity-garden temp-loggia humidity-loggia temp-wz humidity-wz temp-wz2}
+  end
+
+  def shelly_ht_devices
+    %w{ ht_wz ht_sz ht_garden ht_loggia ht_bad}
+  end
+
   # Wird aufgerufen, wenn der Job gestartet wird.
   def perform
 
@@ -100,30 +108,6 @@ class MqttPublisherJob < ApplicationJob
       hm_data[hm] = (value || 0).to_f
     end
 
-    begin
-      shellydata = ShellyCloud.devicestatus(['ht_wz','ht_sz','ht_garden','ht_loggia','ht_bad'],['temperature:0','humidity:0'])
-      if !shellydata['ht_wz'].nil?
-        hm_data['temp-wz2'] = shellydata['ht_wz']['temperature:0']['tC']
-        hm_data['humidity-wz2'] = shellydata['ht_wz']['humidity:0']['rh']      
-      end
-      if !shellydata['ht_sz'].nil?
-        hm_data['temp-sz'] = shellydata['ht_sz']['temperature:0']['tC']
-        hm_data['humidity-sz'] = shellydata['ht_sz']['humidity:0']['rh']      
-      end
-      if !shellydata['ht_garden'].nil?
-        hm_data['temp-garden'] = shellydata['ht_garden']['temperature:0']['tC']
-        hm_data['humidity-garden'] = shellydata['ht_garden']['humidity:0']['rh']      
-      end
-      if !shellydata['ht_loggia'].nil?
-        hm_data['temp-loggia'] = shellydata['ht_loggia']['temperature:0']['tC']
-        hm_data['humidity-loggia'] = shellydata['ht_loggia']['humidity:0']['rh']      
-      end
-      if !shellydata['ht_bad'].nil?
-        hm_data['temp-bad'] = shellydata['ht_bad']['temperature:0']['tC']
-        hm_data['humidity-bad'] = shellydata['ht_bad']['humidity:0']['rh']      
-      end                  
-    rescue
-    end
 
     # Bitcoin-Preis abrufen
     bitcoin = Crypto.where(slug: 'bitcoin').order(last_updated: :desc).first&.price || 0
@@ -141,6 +125,18 @@ class MqttPublisherJob < ApplicationJob
     energyarr = Energy.order(day: :desc).limit(4).pluck(:real_wiener_netze, :grid_consumed) 
     energyarr.shift
     usage_last_days = energyarr.map{|b| b[0].nil? ? b[1] : b[0]}
+
+    c4_ht = {}
+    begin
+      shellydata = ShellyCloud.devicestatus(shelly_ht_devices,['temperature:0','humidity:0'])
+      shelly_ht_devices.each do |ht|
+        if !shellydata[ht].nil?
+          c4_ht["tc-#{ht.gsub('ht_','')}"] = shellydata['ht_wz']['temperature:0']['tC']
+          c4_ht["rh-#{ht.gsub('ht_','')}"] = shellydata['ht_wz']['humidity:0']['rh']
+        end
+      end
+    rescue
+    end
 
     begin
 
@@ -182,6 +178,7 @@ class MqttPublisherJob < ApplicationJob
                                         day3: usage_last_days[2].round(2)
                                        }.to_json ) 
 
+          client.publish("#{mqtt_prefix}c4/ht", c4_ht.to_json)
 
           client.publish("#{mqtt_prefix}grogu/status", grogu.to_json)
 
@@ -222,9 +219,6 @@ class MqttPublisherJob < ApplicationJob
 
   end
 
-  def homematic_recording
-    %w{temp-garden humidity-garden temp-loggia humidity-loggia temp-wz humidity-wz temp-wz2}
-  end
 
 
   private
