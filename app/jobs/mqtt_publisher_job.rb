@@ -131,8 +131,8 @@ class MqttPublisherJob < ApplicationJob
       shellydata = ShellyCloud.devicestatus(shelly_ht_devices,['temperature:0','humidity:0'])
       shelly_ht_devices.each do |ht|
         if !shellydata[ht].nil?
-          c4_ht["tc-#{ht.gsub('ht_','')}"] = shellydata['ht_wz']['temperature:0']['tC']
-          c4_ht["rh-#{ht.gsub('ht_','')}"] = shellydata['ht_wz']['humidity:0']['rh']
+          c4_ht["tc-#{ht.gsub('ht_','')}"] = shellydata[ht]['temperature:0']['tC']
+          c4_ht["rh-#{ht.gsub('ht_','')}"] = shellydata[ht]['humidity:0']['rh']
         end
       end
     rescue
