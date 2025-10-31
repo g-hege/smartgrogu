@@ -6,7 +6,7 @@ class MqttPublisherJob < ApplicationJob
   queue_as :mqtt_publisher # Definiert eine dedizierte Warteschlange für diesen Job
 
   def homematic_recording
-    %w{temp-garden humidity-garden temp-loggia humidity-loggia temp-wz humidity-wz temp-wz2}
+    %w{temp-garden humidity-garden temp-loggia humidity-loggia temp-wz humidity-wz}
   end
 
   def shelly_ht_devices
@@ -102,12 +102,25 @@ class MqttPublisherJob < ApplicationJob
     poolcontrol_addon = Shelly.get_value('poolcontrol','Temperature.GetStatus?id=100')
     pool_temp = poolcontrol_addon.nil? ? 'NV' :poolcontrol_addon['tC']
 
+# Humidity and temp from Homematic Devices
     hm_data = {}
     homematic_recording.each do |hm|
       value = Recording.where(device: hm).order(timestamp: :desc).pluck(:value).first
       hm_data[hm] = (value || 0).to_f
     end
 
+# Humidity and temp from shelly HT-Devices
+    c4_ht = {}
+    begin
+      shellydata = ShellyCloud.devicestatus(shelly_ht_devices,['temperature:0','humidity:0'])
+      shelly_ht_devices.each do |ht|
+        if !shellydata[ht].nil?
+          c4_ht["tc-#{ht.gsub('ht_','')}"] = shellydata[ht]['temperature:0']['tC']
+          c4_ht["rh-#{ht.gsub('ht_','')}"] = shellydata[ht]['humidity:0']['rh']
+        end
+      end
+    rescue
+    end
 
     # Bitcoin-Preis abrufen
     bitcoin = Crypto.where(slug: 'bitcoin').order(last_updated: :desc).first&.price || 0
@@ -125,18 +138,6 @@ class MqttPublisherJob < ApplicationJob
     energyarr = Energy.order(day: :desc).limit(4).pluck(:real_wiener_netze, :grid_consumed) 
     energyarr.shift
     usage_last_days = energyarr.map{|b| b[0].nil? ? b[1] : b[0]}
-
-    c4_ht = {}
-    begin
-      shellydata = ShellyCloud.devicestatus(shelly_ht_devices,['temperature:0','humidity:0'])
-      shelly_ht_devices.each do |ht|
-        if !shellydata[ht].nil?
-          c4_ht["tc-#{ht.gsub('ht_','')}"] = shellydata[ht]['temperature:0']['tC']
-          c4_ht["rh-#{ht.gsub('ht_','')}"] = shellydata[ht]['humidity:0']['rh']
-        end
-      end
-    rescue
-    end
 
     begin
 
