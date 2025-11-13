@@ -248,6 +248,7 @@ GEM
       tilt-jbuilder (>= 0.4.0)
     groupdate (6.7.0)
       activesupport (>= 7.1)
+    hash-deep-merge (0.1.1)
     hashie (5.0.0)
     heroicon (1.0.0)
       rails (>= 5.2)
@@ -280,6 +281,8 @@ GEM
     json (2.15.1)
     jwt (3.1.2)
       base64
+    lazy_high_charts (1.6.1)
+      hash-deep-merge
     logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
@@ -556,6 +559,7 @@ DEPENDENCIES
   httparty
   image_processing (~> 1.2)
   jsbundling-rails (~> 1.0)
+  lazy_high_charts
   mqtt!
   omniauth-facebook (~> 9.0)
   omniauth-github (~> 2.0)

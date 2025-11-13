@@ -5,10 +5,15 @@ import "trix"
 import "@rails/actiontext"
 
 import "chartkick"
-import Highcharts from "highcharts"
-window.Highcharts = Highcharts
 
+//= require jquery
+//= require jquery_ujs
+//= require_tree .
+//= require turbolinks
 
+//= require highcharts/highcharts
+//= require highcharts/highcharts-more
+//= require highcharts/highstock
 
 // Controllers
 import AppCtrl      from './controllers/app'

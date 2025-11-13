@@ -41,7 +41,7 @@ gem 'google-apis-sheets_v4'
 gem 'googleauth'
 gem 'signet'
 gem "pundit"
-
+gem 'lazy_high_charts'
 
 
 

@@ -6,6 +6,46 @@
 
     <% c.with_body do %>
 
+<div id="graph" data-chart-options="<%= @chart.options.to_json %>">
+  </div>
+
+<script>
+  // Funktion, die das Highcharts-Diagramm rendert
+  function renderChart() {
+    // 1. Hole die Optionen aus dem data-Attribut des Divs
+    const chartContainer = document.getElementById('graph');
+    if (!chartContainer) return;
+
+    // Verwende JSON.parse, um die Optionen aus dem Attribut zu bekommen
+    const optionsJson = chartContainer.getAttribute('data-chart-options');
+    if (!optionsJson) return;
+    
+    // Stelle sicher, dass Highcharts verfügbar ist
+    if (typeof Highcharts === 'undefined') {
+      console.error("Highcharts ist noch nicht definiert. Prüfen Sie das Laden in application.js.");
+      return;
+    }
+
+    try {
+      const options = JSON.parse(optionsJson);
+      
+      // 2. Erzeuge das Diagramm
+      new Highcharts.Chart(options);
+    } catch (e) {
+      console.error("Fehler beim Parsen der Chart-Optionen:", e);
+    }
+  }
+
+  // 3. Füge einen Event-Listener hinzu, der sowohl beim ersten Laden
+  //    als auch nach Turbo-Navigationen das Diagramm rendert
+  document.addEventListener('turbo:load', renderChart);
+  
+  // Optional: Wenn es eine Full-Page-Reload ist, führe es sofort aus
+  if (document.readyState === 'complete') {
+    renderChart();
+  }
+</script>
+
      <% @data = EnergyStatistics.consumption_by_day('solar',50) %>
       <!-- Energy Timeline Fullwidth -->
       <div class="w-screen -mx-4 p-4 rounded-xl shadow bg-white mt-8">
@@ -77,6 +117,7 @@
         <h2 class="text-lg font-semibold mb-2">Temp Garden</h2>
         <%= line_chart(@data, width: "100%") %>
       </div>
+
 
 
 
