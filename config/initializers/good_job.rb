@@ -63,6 +63,7 @@ Rails.application.configure do
 	  }
 	end
 
+=begin
 	if ENV['GOOD_JOB_WORKER'] == 'true'
 		Rails.application.config.after_initialize do
 			unless GoodJob::Job.where(job_class: 'MqttPublisherJob', finished_at: nil).exists?
@@ -72,11 +73,7 @@ Rails.application.configure do
 	    	GoodJob::Job.where(queue_name: 'mqtt_listener').delete_all
 	    	GoodJob::Execution.where(queue_name: 'mqtt_listener').delete_all
 		end
-
-
-
 	end
-
-
+=end
 
 end

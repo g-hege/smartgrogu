@@ -5,6 +5,10 @@ Rails.application.config.after_initialize do
         PermanentMonitorJob.perform_later 
         Rails.logger.info "PermanentMonitorJob wurde erfolgreich beim App-Start gestartet."
       end
+      unless GoodJob::Job.where(job_class: MqttPublisherJob.name).exists?
+        MqttPublisherJob.perform_later
+        Rails.logger.info "MqttPublisherJob wurde erfolgreich beim App-Start gestartet."
+      end
     rescue ActiveRecord::StatementInvalid => e
       Rails.logger.warn "PermanentMonitorJob konnte nicht gestartet werden, da die Datenbanktabellen nicht bereit sind: #{e.message}"
     end
