@@ -290,7 +290,7 @@ class Tmdb
 				    missing_ids = seasons_ids - existing_seasons_ids
 					missing_seasons_data = seasons_data.select { |g| missing_ids.include?(g[:id]) }
 					if missing_seasons_data.any?
-						Seasons.insert_all(missing_seasons_data)
+						Season.insert_all(missing_seasons_data)
 					end		
 				end
 

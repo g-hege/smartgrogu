@@ -71,4 +71,6 @@ Rails.application.configure do
 
   config.hosts << "grogu.ddns.net"
 
+  config.index_movie = 'movie2025'
+
 end

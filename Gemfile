@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby File.read(".ruby-version").strip
+#ruby File.read(".ruby-version").strip
 
 # Core
 gem "rails", "~> 8.0"
@@ -20,14 +20,13 @@ gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "cancancan", "~> 3.4"
 
 # additonal by hege
-#gem "motor-admin", "~> 0.4.37"
+gem 'elasticsearch','7.9'
 gem "avo"
 gem "avo-money_field"
 gem 'mqtt', :github => 'njh/ruby-mqtt'
 gem 'terminal-table'
 gem 'colorize'
 gem "chartkick"
-#gem 'chartjs-rails'
 gem 'highcharts-rails'
 gem 'groupdate'
 gem "good_job", "~> 4.11"
@@ -41,7 +40,7 @@ gem 'google-apis-sheets_v4'
 gem 'googleauth'
 gem 'signet'
 gem "pundit"
-gem 'lazy_high_charts'
+#gem 'lazy_high_charts'
 
 
 

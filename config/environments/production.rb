@@ -91,5 +91,7 @@ Rails.application.configure do
   config.log_level = :info
 
   config.hosts << "grogu.ddns.net"
+
+  config.index_movie = 'movie2025'
   
 end
