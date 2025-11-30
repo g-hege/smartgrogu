@@ -1,7 +1,7 @@
 Rails.application.config.after_initialize do
   if defined?(GoodJob) && (Rails.env.development? || Rails.env.production?)
     begin
-      unless GoodJob::Job.where(handler: PermanentMonitorJob.name).exists?
+      unless GoodJob::Job.where(job_class: PermanentMonitorJob.name).exists?
         PermanentMonitorJob.perform_later 
         Rails.logger.info "PermanentMonitorJob wurde erfolgreich beim App-Start gestartet."
       end
