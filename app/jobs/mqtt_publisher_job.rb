@@ -5,6 +5,8 @@ class MqttPublisherJob < ApplicationJob
 
   queue_as :mqtt_publisher # Definiert eine dedizierte Warteschlange für diesen Job
 
+  CYCLE_INTERVAL = 30.seconds 
+
   def homematic_recording
     %w{temp-garden humidity-garden temp-loggia humidity-loggia temp-wz humidity-wz}
   end
@@ -211,12 +213,11 @@ class MqttPublisherJob < ApplicationJob
 
     Rails.logger.info "MQTT publisher finished gracefully."
 
-    GoodJob::Job.where(queue_name: 'mqtt_publisher').where.not(finished_at: nil).delete_all
-    GoodJob::Execution.where(queue_name: 'mqtt_publisher').where.not(finished_at: nil).delete_all
+    GoodJob::Job.where(job_class: MqttPublisherJob.name).where.not(finished_at: nil).delete_all
+    #GoodJob::Execution.where(queue_name: 'mqtt_publisher').where.not(finished_at: nil).delete_all
 
-    if GoodJob::Job.where(queue_name: 'mqtt_publisher', finished_at: nil).count == 1
-      self.class.set(wait: 30.seconds).perform_later
-    end
+    self.class.set(wait: CYCLE_INTERVAL).perform_later
+
 
   end
 
