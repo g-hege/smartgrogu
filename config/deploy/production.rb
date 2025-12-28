@@ -61,3 +61,9 @@ server 'grogu.ddns.net', user: 'deploy', roles: %w{app web db}
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+
+set :bundle_config, {
+  deployment: 'true',
+  path: shared_path.join('bundle'),
+  without: 'development test'
+}
