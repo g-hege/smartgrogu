@@ -9,13 +9,16 @@ Rails.application.routes.draw do
   end
   
 
-  devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks', skip: [:registrations]
-  }
+  devise_for :users,
+     controllers: { omniauth_callbacks: 'users/omniauth_callbacks' },
+     skip: [:registrations]
 
   root "home#index"
 
   resources :articles
+  
+  resources :movies, only: %i[index show]
+
   resource :user, only: %i[edit update destroy]
   resources :users, only: %i[index show]
 

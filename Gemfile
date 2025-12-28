@@ -21,6 +21,8 @@ gem "cancancan", "~> 3.4"
 
 # additonal by hege
 gem 'elasticsearch','7.9'
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
 gem "avo"
 gem "avo-money_field"
 gem 'mqtt', :github => 'njh/ruby-mqtt'

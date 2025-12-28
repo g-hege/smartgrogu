@@ -1,4 +1,8 @@
 class Movie < ApplicationRecord
+
+	include Elasticsearch::Model
+    index_name Rails.configuration.index_movie
+
 	self.table_name = "movie"
 	self.inheritance_column = nil
  
@@ -26,4 +30,12 @@ class Movie < ApplicationRecord
 	def genres
 	    Genre.where(id: genre_ids)
     end
+
+	def self.get_elasticsearch(es_id)
+    	__elasticsearch__.client.get(index: self.index_name, id: es_id)['_source']
+  	rescue Elasticsearch::Transport::Transport::Errors::NotFound
+    	nil
+  	end
+  	
+
 end
