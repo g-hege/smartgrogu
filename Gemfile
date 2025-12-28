@@ -45,8 +45,8 @@ gem "pundit"
 gem 'lazy_high_charts'
 
 
-
-gem 'capistrano', '~> 3.18'
+gem 'capistrano', '~> 3.6'
+gem 'capistrano-bundler', '~> 2.0'
 gem 'capistrano-rails'
 gem 'capistrano-rvm' # Nutze capistrano-rbenv, wenn du rbenv verwendest. Ansonsten capistrano-rvm.
 gem "capistrano3-puma"
