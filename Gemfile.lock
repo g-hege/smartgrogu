@@ -567,9 +567,9 @@ GEM
     zeitwerk (2.7.4)
 
 PLATFORMS
-  arm64-darwin-22
-  x86_64-darwin-17
-  x86_64-darwin-22
+  arm64-darwin
+  ruby
+  x86_64-darwin
   x86_64-linux
 
 DEPENDENCIES

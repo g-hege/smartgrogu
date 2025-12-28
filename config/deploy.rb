@@ -45,7 +45,7 @@ set :keep_releases, 5
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-set :rvm_ruby_version, '4.0.0@smartgrogu' # Passe dies an deine Ruby-Version und Gemset an
+set :rvm_ruby_version, 'ruby-4.0.0' # Passe dies an deine Ruby-Version und Gemset an
 
 namespace :deploy do
 
