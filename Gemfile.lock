@@ -577,8 +577,8 @@ DEPENDENCIES
   avo-money_field
   bootsnap (~> 1.18)
   cancancan (~> 3.4)
-  capistrano (~> 3.6)
-  capistrano-bundler (~> 2.0)
+  capistrano
+  capistrano-bundler
   capistrano-good-job
   capistrano-rails
   capistrano-rvm
