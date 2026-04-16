@@ -55,6 +55,11 @@ Rails.application.configure do
 	      class: 'ShellyImportJob',
 	      description: 'import shelly data'
 	    },
+	    solar_regulator:{ 
+	      cron: '*/1 * * * *', # 
+	      class: 'SolarRegulatorJob',
+	      description: 'regulate dtu->hoymiles'
+	    },
 	    homematic_import: {
 	      cron: '*/30 * * * *', # 
 	      class: 'HomematicImportJob',
