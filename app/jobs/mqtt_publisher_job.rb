@@ -135,7 +135,7 @@ class MqttPublisherJob < ApplicationJob
     grogu = { uptime: distance_of_time_in_words(Rails.application.config.boot_time, Time.now) }
 
     emdata = Shelly.get_device_value('energy','Shelly.GetStatus')
-    current_power_grid = emdata["em:0"]['total_act_power'].to_f
+    current_power_grid = emdata&.dig("em:0", "total_act_power")&.to_f || 0.0
 
     energyarr = Energy.order(day: :desc).limit(4).pluck(:real_wiener_netze, :grid_consumed) 
     energyarr.shift

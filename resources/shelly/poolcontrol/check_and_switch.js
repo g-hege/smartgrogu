@@ -1,7 +1,7 @@
 let TARGET_SHELLY_IP = "192.168.0.13";  // outdoor plug pool
 let TARGET_SHELLY_RELAY_ID = 0; 
 let INTERVAL_SECONDS = 10; // check every 10 seconds
-let log = 1;
+let log = 2;
 let SHELLY_ID = undefined;
 let MQTTpublish = true;
 
@@ -14,24 +14,39 @@ Shelly.call("Mqtt.GetConfig", "", function (res, err_code, err_msg, ud) {
   }
 });
 
-function setShellyRelay(state) {
+let MAX_RETRIES = 2; // Wie oft soll bei Fehler wiederholt werden?
+
+function setShellyRelay(state, attempt) {
+  let currentAttempt = attempt || 0;
   let url = "http://" + TARGET_SHELLY_IP + "/rpc/Switch.Set";
-  let body = JSON.stringify({
+  let body = {
     id: TARGET_SHELLY_RELAY_ID,
     on: state
-  });
+  };
 
   Shelly.call("HTTP.POST", {
     url: url,
-    body: body,
-    headers: { "Content-Type": "application/json" }
-   }, function(result, error_code, error_message) {
+    body: JSON.stringify(body),
+    headers: { "Content-Type": "application/json" },
+    timeout: 5 // 5 Sekunden Timeout setzen
+  }, 
+  function(result, error_code, error_message) {
     if (error_code === 0) {
-      if(log > 1){
-        print("Shelly Relay " + ((state) ? 'ON' : 'OFF'));
+      if (log > 1) {
+        print("Shelly Relay " + (state ? 'ON' : 'OFF') + " (Erfolg bei Versuch " + (currentAttempt + 1) + ")");
       }
     } else {
-      print("Error Shelly Relay post: " + error_message);
+      print("Error Shelly Relay (" + error_message + "). Versuch: " + (currentAttempt + 1));
+
+      // Wenn noch Versuche übrig sind, nach 2 Sekunden erneut probieren
+      if (currentAttempt < MAX_RETRIES) {
+        print("Starte Wiederholung in 2 Sekunden...");
+        Timer.set(2000, false, function() {
+          setShellyRelay(state, currentAttempt + 1);
+        });
+      } else {
+        print("KRITISCH: Shelly nach " + (MAX_RETRIES + 1) + " Versuchen nicht erreichbar.");
+      }
     }
   });
 }
@@ -87,9 +102,8 @@ function continueAfterRuntimeUpdate() {
 function checkAndSwitch() {
 
   let kvsValuesToLoad = [
-    { key: 'CurrentSolarPowerWatts', callback: function(value) {currentSolarPowerWatts = value}, default: 1},
-    { key: 'MinSolarPowerPumpRun', callback: function(value) {minSolarPowerPumpRun = value}, default: 450},
-    { key: 'BoilerOn', callback: function(value) {BoilerOn = value}, default: 'false'},
+    { key: 'CurrentGridPowerWatts', callback: function(value) {currentGridPowerWatts = value}, default: 0},
+    { key: 'CurrentPumpPowerWatts', callback: function(value) {currentPumpPowerWatts = value}, default: 0},
     { key: 'PumpMode', callback: function(value) {PumpMode = value}, default: 'auto'},
     { key: 'DailyPumpRunTime', callback: function(value) {currentRunTime = value}, default: 0},  
     { key: 'MaxMarketPrice', callback: function(value) {maxMarketPrice = value}, default: 20},  
@@ -118,61 +132,74 @@ function checkAndSwitch() {
           }
   // load kvs end
 
-          if (log > 1) {
-            print("============Current values=============:");
-            print("currentSolarPowerWatts: " + currentSolarPowerWatts);
-            print("minSolarPowerPumpRun: " + minSolarPowerPumpRun);
-            print("BoilerOn: " + ((BoilerOn) ? "on" : "off"));
-            print("PumpMode: " + PumpMode);
-            print("RunTime: "+ currentRunTime);
-            print('MaxMarketPrice: ', maxMarketPrice);
-            print('CurrentMarketPrice: ', currentMarketPrice);
-            print('LimitPumpRuntime: ', limitPumpRuntime);
-          }
+
             let shouldPumpRun = false;
+            let pumpIsRunning = Number(currentPumpPowerWatts) > 50;
             let currentRunTimeHours = currentRunTime / 3600;
             let switchCondition = -1;
 
-//            print("info(",currentSolarPowerWatts , "W > ", minSolarPowerPumpRun, "W) | Runtime: ",currentRunTimeHours.toFixed(2), ' hours');
-//           print(BoilerOn);
-
-            // condition 1: currentSolarPowerWatts > minSolarPowerPumpRun UND BoilerOn = false
-            if ((parseInt(currentSolarPowerWatts) > parseInt(minSolarPowerPumpRun)) && !BoilerOn) {
-              switchCondition = 'solar';
-              shouldPumpRun = true;
-              print("condition 1 fulfilled: enough solar power and the boiler is off. (",currentSolarPowerWatts , "W > ", minSolarPowerPumpRun, "W) | Runtime: ",currentRunTimeHours.toFixed(2), ' hours');
+            if (pumpIsRunning) {
+                // Die Pumpe läuft bereits
+                if (currentGridPowerWatts > 50) {
+                    shouldPumpRun = false;
+                    print("Condition 1: Zu wenig Solarstrom (Netzbezug > 50W) -> Pumpe AUS. Aktueller Netzbezug: ", currentGridPowerWatts, "W");
+                } else {
+                    shouldPumpRun = true;
+                    switchCondition = 'solar';
+                }
+            } else {
+                // Die Pumpe ist momentan aus
+                if (Number(currentGridPowerWatts) < -350) {
+                    shouldPumpRun = true;
+                    switchCondition = 'solar';
+                    print("Condition 1: Genug Überschuss (Einspeisung > 350W) -> Pumpe AN. Aktueller Netzbezug: ", currentGridPowerWatts, "W");
+                } else {
+                    shouldPumpRun = false;
+                }
             }
 
             // condition 2: price ok
-            if (parseInt(currentMarketPrice) <= parseInt(maxMarketPrice) && parseInt(currentRunTimeHours) <= parseInt(limitPumpRuntime)){
+            if (shouldPumpRun === false && parseInt(currentMarketPrice) <= parseInt(maxMarketPrice) && parseInt(currentRunTimeHours) <= parseInt(limitPumpRuntime)){
               switchCondition = 'price';
               shouldPumpRun = true;
               print("condition 2 fulfilled: currentMarketPrice: ",currentMarketPrice, ' cent <= MaxMarketPrice: ', maxMarketPrice, ' cent | runtime: ',currentRunTimeHours.toFixed(2), ' < ', limitPumpRuntime, ' Stunden' );
             }
 
             // condition 3: overrulePumpSwitch = true
-            if (PumpMode === 'on') {
+            if (shouldPumpRun === false && PumpMode === 'on') {
               switchCondition = 'override';              
               shouldPumpRun = true;
               print("condition 3 fulfilled: manual override");
             }
             
             if (shouldPumpRun === false) {
-              print("pump is off (Solar: ",currentSolarPowerWatts,"W)");
+              print("pump is off");
               switchCondition = 'off';
             }
+   
+            if(pumpIsRunning != shouldPumpRun){
+                setShellyRelay(shouldPumpRun);
+            }
 
-            setShellyRelay(shouldPumpRun);
+            if (log > 1) {
+                let logMessage = "============ Current values =============\n" +
+                      "currentPumpPowerWatts: " + currentPumpPowerWatts + " | " +
+                      "currentGridPowerWatts: " + currentGridPowerWatts + "\n" +
+                      "PumpMode: " + PumpMode + " | " + 
+                      "IsRunning: " + (pumpIsRunning ? "YES" : "NO") + " | " +
+                      "ShouldRun: " + (shouldPumpRun ? "YES" : "NO") + " | " +
+                      "RunTime: " + (currentRunTime / 3600).toFixed(2) + " | " +
+                      "LimitPumpRuntime: " + limitPumpRuntime + "\n" + 
+                      "MaxMarketPrice: " + maxMarketPrice + " | " +
+                      "CurrentMarketPrice: " + currentMarketPrice + "\n=============";
+                print(logMessage);
+            }
 
             if (typeof SHELLY_ID !== "undefined" && MQTTpublish === true) {
                 payload = { 
                   switch: ((shouldPumpRun) ? 'on' : 'off'),
                   switchCondition: switchCondition,
-                  current_solar: currentSolarPowerWatts,
-                  min_solar_power: minSolarPowerPumpRun,
-                  boiler_on: ((BoilerOn) ? "on" : "off"),
                   pump_mode: PumpMode,
-                  boiler: ((BoilerOn) ? "on" : "off"),
                   max_market_price: maxMarketPrice,
                   current_market_price: currentMarketPrice,
                   daily_runtime: currentRunTimeHours.toFixed(2),
