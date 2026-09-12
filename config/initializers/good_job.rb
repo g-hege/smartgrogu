@@ -59,7 +59,7 @@ Rails.application.configure do
 	      cron: '*/1 * * * *', # 
 	      class: 'SolarRegulatorJob',
 	      description: 'regulate dtu->hoymiles'
-	    },
+	    }
 #	    homematic_import: {
 #	      cron: '*/30 * * * *', # 
 #	      class: 'HomematicImportJob',
