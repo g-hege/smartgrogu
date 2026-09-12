@@ -64,7 +64,7 @@ Rails.application.configure do
 #	      cron: '*/30 * * * *', # 
 #	      class: 'HomematicImportJob',
 #	      description: 'import homematic data'
-	    }	    
+#	    }	    
 	  }
 	end
 
