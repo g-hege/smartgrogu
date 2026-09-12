@@ -14,7 +14,7 @@ Rails.application.configure do
 	# ... deine anderen GoodJob-Konfigurationen ...
 
 	Rails.application.configure do
-		
+
 	# Erstelle einen eigenen Logger für GoodJob
 	  good_job_logger = ActiveSupport::Logger.new(Rails.root.join("log", "good_job.log"))
 	  
@@ -23,6 +23,9 @@ Rails.application.configure do
 
 	  # GoodJob anweisen, diesen Logger zu verwenden
 	  config.good_job.logger = good_job_logger
+
+	  # ActiveJob-Logging auf dieselbe Datei umleiten
+  	  config.active_job.logger = good_job_logger
 
 
 	  config.good_job.cron = {
