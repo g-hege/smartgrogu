@@ -16,7 +16,11 @@ Rails.application.configure do
 	Rails.application.configure do
 
 	# Erstelle einen eigenen Logger für GoodJob
-	  good_job_logger = ActiveSupport::Logger.new(Rails.root.join("log", "good_job.log"))
+	  good_job_logger = ActiveSupport::Logger.new(
+	  	Rails.root.join("log", "good_job.log"),
+	  	"daily",
+  		10
+	  )
 	  
 	  # Optional: Gleiches Log-Format wie das Standard-Rails-Format nutzen
 	  good_job_logger.formatter = Rails.application.config.log_formatter
