@@ -211,7 +211,7 @@ class MqttPublisherJob < ApplicationJob
       sleep(10)
     end
 
-    Rails.logger.info "MQTT publisher finished gracefully."
+    Rails.logger.info "MQTT publisher finished gracefully at #{Time.current}"
 
     GoodJob::Job.where(job_class: MqttPublisherJob.name).where.not(finished_at: nil).delete_all
     #GoodJob::Execution.where(queue_name: 'mqtt_publisher').where.not(finished_at: nil).delete_all
