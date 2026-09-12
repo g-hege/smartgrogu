@@ -60,25 +60,12 @@ Rails.application.configure do
 	      class: 'SolarRegulatorJob',
 	      description: 'regulate dtu->hoymiles'
 	    },
-	    homematic_import: {
-	      cron: '*/30 * * * *', # 
-	      class: 'HomematicImportJob',
-	      description: 'import homematic data'
+#	    homematic_import: {
+#	      cron: '*/30 * * * *', # 
+#	      class: 'HomematicImportJob',
+#	      description: 'import homematic data'
 	    }	    
 	  }
 	end
-
-=begin
-	if ENV['GOOD_JOB_WORKER'] == 'true'
-		Rails.application.config.after_initialize do
-			unless GoodJob::Job.where(job_class: 'MqttPublisherJob', finished_at: nil).exists?
-		    	Rails.logger.info "Starting MqttPublisherJob chain..."
-		    	MqttPublisherJob.perform_later
-			end
-	    	GoodJob::Job.where(queue_name: 'mqtt_listener').delete_all
-	    	GoodJob::Execution.where(queue_name: 'mqtt_listener').delete_all
-		end
-	end
-=end
 
 end
