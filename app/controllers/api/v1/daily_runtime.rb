@@ -26,7 +26,7 @@ module API
             record.save
 #            Rails.logger.info "#{params[:device_id]} - #{params[:day]} | #{device} -> #{params[:runtime]}"
           else
-            Rails.logger.error "API Post::DailyRuntime - device: #{device} not configured!"
+            Rails.logger.error "API Post::DailyRuntime - device: #{params[:device_id]} not configured!"
           end
 
 #          Rails.logger.info "API Post::DailyRuntime"
