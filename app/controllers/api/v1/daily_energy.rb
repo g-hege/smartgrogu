@@ -27,7 +27,8 @@ module API
             record.self_consumed_rate = params[:self_consumed_rate]            
             record.save
 
-          Rails.logger.info "API Post::DailyEnergy"
+#          Rails.logger.info "API Post::DailyEnergy"
+
           { status: 'success!!', message: 'data saved' }
 
         end
