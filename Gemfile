@@ -18,6 +18,7 @@ gem "omniauth-github", "~> 2.0"
 gem "omniauth-google-oauth2", "~> 1.1"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "cancancan", "~> 3.4"
+gem "json", "< 3.0"
 
 # additonal by hege
 gem 'elasticsearch','7.9'
@@ -29,7 +30,6 @@ gem 'mqtt', :github => 'njh/ruby-mqtt'
 gem 'terminal-table'
 gem 'colorize'
 gem "chartkick"
-gem 'highcharts-rails'
 gem 'groupdate'
 gem "good_job", "~> 4.11"
 gem 'httparty'
@@ -42,8 +42,6 @@ gem 'google-apis-sheets_v4'
 gem 'googleauth'
 gem 'signet'
 gem "pundit"
-gem 'lazy_high_charts'
-
 
 gem 'capistrano'
 gem 'capistrano-bundler'
