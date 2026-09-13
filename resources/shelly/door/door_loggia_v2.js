@@ -1,5 +1,5 @@
-const DEVICE_NAME = 'Maindoor'
-const SENSOR_MAC = "fc:4d:6a:38:91:fd"; // MAC-Adresse des Türsensors
+const DEVICE_NAME = 'Loggiadoor'
+const SENSOR_MAC = "fc:4d:6a:38:9f:28"; // MAC-Adresse des Türsensors
 const SIGNAL_URL = "https://signal.callmebot.com/signal/send.php?phone=555db374-365a-4115-ba4e-f75d3c28cb23&apikey=948035&text=";
 
 // Default-Werte für KVS Fallback
