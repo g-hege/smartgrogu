@@ -1,4 +1,4 @@
-const DEVICE_NAME = 'Maindoor'
+const DEVICE_NAME = 'Main Door'
 const SENSOR_MAC = "fc:4d:6a:38:91:fd"; // MAC-Adresse des Türsensors
 const SIGNAL_URL = "https://signal.callmebot.com/signal/send.php?phone=555db374-365a-4115-ba4e-f75d3c28cb23&apikey=948035&text=";
 
@@ -75,7 +75,7 @@ function sendToRailsApi(isoTimestamp) {
 }
 
 function startBleScanner() {
-  print(DEVICE_NAME + " DOOR SENSOR SCRIPT STARTED");
+  print(DEVICE_NAME + " SENSOR SCRIPT STARTED");
   BLE.Scanner.Start({ active: true, duration_ms: BLE.Scanner.INFINITE_SCAN });
 
   BLE.Scanner.Subscribe(function(event, result) {
