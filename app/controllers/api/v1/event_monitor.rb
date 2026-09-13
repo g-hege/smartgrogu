@@ -25,6 +25,7 @@ module API
               event_stamp: params[:event_stamp],
               event: params[:event],
               device: device_name,
+              device_id: params[:device_id],
               info: params[:info]
             )
 
