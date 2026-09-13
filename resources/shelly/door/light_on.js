@@ -1,5 +1,5 @@
 // Konfiguration
-const DEVICE_NAME = "WC Fan";
+const DEVICE_NAME = "WC Light";
 
 // Default-Werte für KVS Fallback
 let RAILS_API_URL = "http://192.168.0.147:3000";
@@ -62,7 +62,7 @@ function sendToRailsApi(eventState) {
     "device_id": DEVICE_ID,
     "event_stamp": isoTimestamp,
     "event": eventState,
-    "info": DEVICE_NAME + " Light " + eventState
+    "info": DEVICE_NAME + " " + eventState
   });
 
   print("Sende Event '" + eventState + "' an Rails API: " + apiuri);
@@ -97,13 +97,13 @@ function startInputMonitor() {
       // Nur reagieren, wenn der Zustand von OFF auf ON wechselt (Licht eingeschaltet)
       if (currentState === true && lastInputState !== true) {
         lastInputState = true;
-        print("WC Licht wurde EINGESCHALTET!");
+        print(DEVICE_NAME + " wurde EINGESCHALTET!");
         sendToRailsApi("ON");
       } 
       // Zustand aktualisieren, wenn das Licht wieder ausgeschaltet wird
       else if (currentState === false) {
         lastInputState = false;
-        print("WC Licht wurde AUSGESCHALTET.");
+        print(DEVICE_NAME + " wurde AUSGESCHALTET.");
       }
     }
   });
