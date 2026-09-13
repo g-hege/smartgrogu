@@ -10,7 +10,7 @@ module API
 
       mount API::V1::DailyRuntime
       mount API::V1::DailyEnergy
-
+      mount API::V1::EventMonitor
     end
   end
 end
