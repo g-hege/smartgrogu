@@ -1,5 +1,5 @@
-const DEVICE_NAME = 'Loggia Door'
-const SENSOR_MAC = "fc:4d:6a:38:9f:28"; // MAC-Adresse des Türsensors
+const DEVICE_NAME = "Main_Door";
+const SENSOR_MAC = "fc:4d:6a:38:91:fd"; // MAC-Adresse des Türsensors
 const SIGNAL_URL = "https://signal.callmebot.com/signal/send.php?phone=555db374-365a-4115-ba4e-f75d3c28cb23&apikey=948035&text=";
 
 // Default-Werte für KVS Fallback
@@ -112,6 +112,7 @@ function startBleScanner() {
         isoTimestamp = d.toISOString();
       }
 
+
       if (sysStatus && sysStatus.time) {
         let time = sysStatus.time;
         let dateStr = "";
@@ -123,17 +124,15 @@ function startBleScanner() {
           let day = d.getDate();
           let month = d.getMonth() + 1;
           let year = d.getFullYear();
-
           if (day < 10) day = "0" + day;
           if (month < 10) month = "0" + month;
-
           dateStr = day + "." + month + "." + year;
         }
-
         timeStr = "%20" + dateStr + "%20" + time;
       }
 
       // 1. Signal Nachricht senden
+
       let message = "%20" + DEVICE_NAME + "%20Opened" + timeStr;
       let encodedUrl = SIGNAL_URL + message;
 
@@ -141,13 +140,12 @@ function startBleScanner() {
         url: encodedUrl,
         timeout: 30
       }, function(res, err) {
-        if (err) {
-          print("ERROR → " + err + " (Code: " + (res ? res.code : "unknown") + ")");
+        if (err || (res && res.code !== 200)) {
+          print("ERROR Signal Send -> Code: " + (res ? res.code : "unknown"));
         } else {
           print("Signal Nachricht erfolgreich gesendet. Status: " + res.code);
         }
       });
-
       // 2. An Rails API (event_monitor) senden
       sendToRailsApi(isoTimestamp);
 
